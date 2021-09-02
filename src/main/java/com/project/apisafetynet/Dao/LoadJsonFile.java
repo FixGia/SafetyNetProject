@@ -1,9 +1,12 @@
 package com.project.apisafetynet.Dao;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-import com.project.apisafetynet.PersonRepository;
-import com.project.apisafetynet.Service.PersonService;
+import com.project.apisafetynet.Repository.FireStationRepository;
+import com.project.apisafetynet.Service.FireStationServiceImp;
+import com.project.apisafetynet.Service.PersonServiceImpl;
 import com.project.apisafetynet.model.Persons;
+import com.project.apisafetynet.model.Firestation;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -14,17 +17,21 @@ import java.util.List;
 
 
 @Component
+@Data
 public class LoadJsonFile {
 
+    private static String filePath = "src/main/resources/data.json";
+    private static byte[] bytesFile;
 
-    public static void readJsonFile() throws IOException {
+    private static FireStationRepository FireStationRepository;
 
-        byte[] bytesFile;
-        final String filePath = "src/main/resources/data.json";
+
+    public static void readPersons() throws IOException {
+
         bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
         Any any = iter.readAny();
-        Any personAny = any.get("persons");
+        Any personAny = any.get("Persons");
         List<Persons> persons = new ArrayList<>();
         personAny.forEach(a -> persons.add(new Persons().firstName(a.get("firstName").toString())
                 .address(a.get("address").toString())
@@ -34,16 +41,28 @@ public class LoadJsonFile {
                 .zip(a.get("zip").toString())
                 .email(a.get("email").toString())
                 .build()));
-        PersonService personService = new PersonService();
-
-
         persons.forEach(p -> System.out.println(p.firstName.concat(p.lastName).concat(p.address).concat(p.city).concat(p.phone).concat(p.zip)));
+        PersonServiceImpl personService = new PersonServiceImpl(); //** Can't SAVE **//
+        personService.saveAll(persons);
+    }
+    public static void readFireStation() throws IOException {
+
+        bytesFile = Files.readAllBytes(new File(filePath).toPath());
+        JsonIterator iter = JsonIterator.parse(bytesFile);
+        Any any = iter.readAny();
+        Any fireStationAny = any.get("firestations");
+        List<Firestation> firestations = new ArrayList<>();
+        fireStationAny.forEach(a -> firestations.add(new Firestation().address(a.get("address").toString()).station(a.get("station").toString())
+                .build()));
+
+       FireStationServiceImp fireStationService = new FireStationServiceImp(FireStationRepository); //** Can't Save **//
+       fireStationService.saveAll(firestations);
+
+        firestations.forEach(f -> System.out.println(f.address.concat("  "+f.station)));
 
 
-
-
-
-
+    }
+    public static void readMedicalRecords() {
 
     }
 }

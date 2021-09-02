@@ -14,8 +14,9 @@ public class ApiSafetyNetApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        LoadJsonFile loadJsonFile= new LoadJsonFile();
-        LoadJsonFile.readJsonFile();
+
+        LoadJsonFile.readPersons();
+        LoadJsonFile.readFireStation();
 
     }
 }

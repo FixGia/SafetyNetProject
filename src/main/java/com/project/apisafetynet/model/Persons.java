@@ -3,7 +3,6 @@ package com.project.apisafetynet.model;
 import com.jsoniter.annotation.JsonCreator;
 import com.jsoniter.annotation.JsonProperty;
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data
@@ -11,7 +10,7 @@ import javax.persistence.*;
 @Table(name="Persons")
 public class Persons {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
     public String firstName;
     public String lastName;
@@ -41,8 +40,9 @@ public class Persons {
     }
 
     public Persons() {
-        new Persons (firstName,lastName,address,city,zip,phone,email) ;
+
     }
+
 
     public Persons firstName(String firstName) {
         this.firstName = firstName;
