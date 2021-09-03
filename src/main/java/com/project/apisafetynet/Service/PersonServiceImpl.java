@@ -1,20 +1,22 @@
 package com.project.apisafetynet.Service;
 
 
+import com.project.apisafetynet.Dao.LoadJsonFile;
 import com.project.apisafetynet.Repository.PersonRepository;
 import com.project.apisafetynet.model.Persons;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
-@Data
 public class PersonServiceImpl implements PersonService {
 
-    @Autowired
-    PersonRepository personRepository;
+    final PersonRepository personRepository;
+    final LoadJsonFile loadJsonfile;
+
+    public PersonServiceImpl(PersonRepository personRepository, LoadJsonFile loadJsonfile) {
+        this.personRepository = personRepository;
+        this.loadJsonfile = loadJsonfile;
+    }
 
     @Override
     public <S extends Persons> S save(S s) {
@@ -23,7 +25,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public <S extends Persons> Iterable<S> saveAll(Iterable<S> iterable) {
-        return null;
+        return personRepository.saveAll(iterable);
     }
 
     @Override

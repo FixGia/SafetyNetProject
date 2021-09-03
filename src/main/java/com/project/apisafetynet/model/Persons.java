@@ -3,7 +3,9 @@ package com.project.apisafetynet.model;
 import com.jsoniter.annotation.JsonCreator;
 import com.jsoniter.annotation.JsonProperty;
 import lombok.Data;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,6 +21,8 @@ public class Persons {
     public String zip;
     public String phone;
     public String email;
+
+
 
     @JsonCreator
     public Persons(
@@ -81,8 +85,9 @@ public class Persons {
 
     public Persons build() {
       return new Persons(firstName,lastName,address,city,zip,phone,email);
-
     }
+
+
 }
 
 
