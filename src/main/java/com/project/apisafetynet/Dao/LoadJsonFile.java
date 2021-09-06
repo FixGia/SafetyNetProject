@@ -2,15 +2,12 @@ package com.project.apisafetynet.Dao;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 import com.project.apisafetynet.Repository.PersonRepository;
-import com.project.apisafetynet.Service.FireStationServiceImp;
+import com.project.apisafetynet.Service.PersonService;
 import com.project.apisafetynet.Service.PersonServiceImpl;
 import com.project.apisafetynet.model.Persons;
 import com.project.apisafetynet.model.Firestation;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,10 +22,12 @@ public class LoadJsonFile {
     private static String filePath = "src/main/resources/data.json";
     private static byte[] bytesFile;
     private static PersonServiceImpl personService;
+    private static PersonRepository personRepository;
 
-
-
-
+    public LoadJsonFile(PersonServiceImpl personService, PersonRepository personRepository) {
+        this.personService = personService;
+        this.personRepository = personRepository;
+    }
 
     public static void readPersons() throws IOException {
 
@@ -45,6 +44,9 @@ public class LoadJsonFile {
                 .zip(a.get("zip").toString())
                 .email(a.get("email").toString())
                 .build()));
+        personRepository.saveAll(persons);
+
+
 
         persons.forEach(p -> System.out.println(p.firstName.concat(p.lastName).concat(p.address).concat(p.city).concat(p.phone).concat(p.zip)));
 

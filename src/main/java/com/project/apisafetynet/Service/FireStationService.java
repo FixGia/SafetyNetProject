@@ -1,6 +1,5 @@
 package com.project.apisafetynet.Service;
 
-import com.project.apisafetynet.Repository.FireStationRepository;
+public interface FireStationService{
 
-public interface FireStationService extends FireStationRepository {
 }
