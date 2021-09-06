@@ -7,10 +7,10 @@ import javax.persistence.*;
 
 @Data
 @Entity
-
 public class Firestation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long id;
     @Column
     public String address;
     @Column
