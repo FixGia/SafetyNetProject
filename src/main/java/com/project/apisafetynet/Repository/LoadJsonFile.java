@@ -66,7 +66,7 @@ public class LoadJsonFile {
         fireStationAny.forEach(a -> firestations.add(new FireStation().address(a.get("address").toString()).station(a.get("station").toString())
                 .build()));
         firestations.forEach(f -> System.out.println(f.address.concat("  "+f.station)));
-        fireStationService.saveFireStationService(firestations);
+        fireStationService.saveFireStations(firestations);
 
 
     }
