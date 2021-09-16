@@ -5,12 +5,11 @@ import com.jsoniter.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
 @Table(name="Persons")
-public class Persons {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
@@ -25,7 +24,7 @@ public class Persons {
 
 
     @JsonCreator
-    public Persons(
+    public Person(
             @JsonProperty("firstname") String firstName,
             @JsonProperty("lastname") String lastName,
             @JsonProperty("address") String address,
@@ -43,48 +42,48 @@ public class Persons {
 
     }
 
-    public Persons() {
+    public Person() {
 
     }
 
 
-    public Persons firstName(String firstName) {
+    public Person firstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
-    public Persons lastName(String lastName) {
+    public Person lastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
 
-    public Persons phone(String phone) {
+    public Person phone(String phone) {
         this.phone = phone;
         return this;
     }
 
-    public Persons zip(String zip) {
+    public Person zip(String zip) {
         this.zip = zip;
         return this;
     }
 
-    public Persons address(String address) {
+    public Person address(String address) {
         this.address = address;
         return this;
     }
 
-    public Persons city(String city) {
+    public Person city(String city) {
         this.city = city;
         return this;
     }
 
-    public Persons email(String email) {
+    public Person email(String email) {
         this.email = email;
         return this;
     }
 
 
-    public Persons build() {
-      return new Persons(firstName,lastName,address,city,zip,phone,email);
+    public Person build() {
+      return new Person(firstName,lastName,address,city,zip,phone,email);
     }
 
 

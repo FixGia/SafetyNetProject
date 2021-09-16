@@ -2,8 +2,11 @@ package com.project.apisafetynet.Service;
 
 
 import com.project.apisafetynet.Repository.PersonRepository;
+import com.project.apisafetynet.model.Person;
 import lombok.Data;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -15,5 +18,35 @@ public class PersonServiceImpl implements PersonService {
     public PersonServiceImpl(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
+
+    @Override
+    public void SavePersons(List<Person> personsList) {
+        this.personRepository.saveAll(personsList);
+    }
+
+    @Override
+    public Iterable<Person> getPersons() {
+        return personRepository.findAll();
+    }
+
+    @Override
+    public Person deletePerson(Person person) {
+        this.personRepository.delete(person);
+        return person;
+    }
+
+    @Override
+    public Person savePerson(Person person) {
+        this.personRepository.save(person);
+        return person;
+    }
+
+    @Override
+    public Person getPersonByFirstNameAndLastName(Person firstname, Person lastname) {
+        Person person = personRepository.findPersonByFirstNameAndLastName(firstname,lastname);
+        return  person;
+    }
+
+
 
 }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class Firestation {
+public class FireStation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
@@ -18,25 +18,25 @@ public class Firestation {
 
 
 
-    public Firestation( String address,
+    public FireStation( String address,
                         String station) {
         this.address = address;
         this.station = station;
     }
 
-    public Firestation() {
+    public FireStation() {
     }
 
-    public Firestation address(String address) {
+    public FireStation address(String address) {
         this.address = address;
         return this;
     }
-    public Firestation station(String station) {
+    public FireStation station(String station) {
         this.station= station;
         return this;
     }
-    public Firestation build () {
-        return new Firestation(address,station);
+    public FireStation build () {
+        return new FireStation(address,station);
     }
 
 }

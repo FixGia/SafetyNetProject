@@ -1,6 +1,6 @@
 package com.project.apisafetynet;
 
-import com.project.apisafetynet.Dao.LoadJsonFile;
+import com.project.apisafetynet.Repository.LoadJsonFile;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +17,7 @@ public class ApiSafetyNetApplication implements CommandLineRunner {
 
         LoadJsonFile.readPersons();
         LoadJsonFile.readFireStation();
+        LoadJsonFile.readMedicalRecords();
 
     }
 }
