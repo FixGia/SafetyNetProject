@@ -4,6 +4,7 @@ package com.project.apisafetynet.Service;
 import com.project.apisafetynet.model.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PersonService {
 
@@ -15,7 +16,7 @@ public interface PersonService {
 
     Person savePerson(Person person);
 
-    Person getPersonByFirstNameAndLastName(Person firstname, Person lastname);
+    Optional<Person> getPersonByFirstNameAndLastName(Person firstname, Person lastname);
 
     }
 

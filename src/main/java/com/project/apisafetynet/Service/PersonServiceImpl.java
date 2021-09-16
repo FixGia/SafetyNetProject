@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -42,9 +43,9 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person getPersonByFirstNameAndLastName(Person firstname, Person lastname) {
-        Person person = personRepository.findPersonByFirstNameAndLastName(firstname,lastname);
-        return  person;
+    public Optional<Person> getPersonByFirstNameAndLastName(Person firstname, Person lastname) {
+        return personRepository.findPersonByFirstNameAndLastName(firstname,lastname);
+
     }
 
 
