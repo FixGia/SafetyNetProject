@@ -1,9 +1,6 @@
-package com.project.apisafetynet.Repository;
+package com.project.apisafetynet.Service;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-import com.project.apisafetynet.Service.FireStationServiceImp;
-import com.project.apisafetynet.Service.MedicalRecordServiceImpl;
-import com.project.apisafetynet.Service.PersonService;
 import com.project.apisafetynet.model.FireStation;
 import com.project.apisafetynet.model.MedicalRecord;
 import com.project.apisafetynet.model.Person;
@@ -26,10 +23,10 @@ public class LoadJsonFile {
     private static FireStationServiceImp fireStationService;
     private static MedicalRecordServiceImpl medicalRecordService;
 
-    public LoadJsonFile(MedicalRecordServiceImpl medicalRecordService,PersonService personService,FireStationServiceImp fireStationService,FireStationRepository fireStationRepository) {
-        this.personService = personService;
-        this.fireStationService = fireStationService;
-        this.medicalRecordService = medicalRecordService;
+    public LoadJsonFile(MedicalRecordServiceImpl medicalRecordService, PersonService personService, FireStationServiceImp fireStationService) {
+        LoadJsonFile.personService = personService;
+        LoadJsonFile.fireStationService = fireStationService;
+        LoadJsonFile.medicalRecordService = medicalRecordService;
     }
 
     public static void readPersons() throws IOException {
