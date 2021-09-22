@@ -2,10 +2,13 @@ package com.project.apisafetynet.Controller;
 
 import com.project.apisafetynet.Service.PersonService;
 import com.project.apisafetynet.model.Person;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 
 @RestController
+@RequestMapping("persons")
 public class PersonController {
 
     final PersonService personService;
@@ -15,40 +18,52 @@ public class PersonController {
     }
 
     /**
+     * Read - Get all persons
+     * @return all persons
+     */
+    @GetMapping()
+    public Iterable<Person> getPersons() {
+        return personService.getPersons();
+    }
+    /**
      * Create - Add a new person
      * @param person An object person
+     * @param Id Person's firstName and lastName
      * @return The person object saved
      */
-    @PostMapping("/person")
-    public Person createPerson(@RequestBody Person person) {
-        return personService.savePerson(person);
+    @PostMapping("{Id}")
+    public Person createPerson(@PathVariable("Id") String Id, Person person) {
+
+        Optional<Person> p = personService.getPerson(Id);
+        if (p.isEmpty()) {
+           Person currentPerson = personService.savePerson(person);
+            return currentPerson;
+        } else {
+            return null;
+        }
     }
-
-
     /**
      * Read - Get one person
      *
-     * @param firstname The firstname of the person
-     * @param lastname  The lastname of the person
+     * @param Id Person's FirstName and LastName
      * @return A person object full filled
      */
-    @GetMapping("/person/{firstname}+{lastname}")
-    public Person getPerson(@PathVariable("firstname") Person firstname, @PathVariable("lastname") Person lastname) {
-        Optional<Person> person = personService.getPersonByFirstNameAndLastName(firstname, lastname);
+    @GetMapping("{Id}")
+    public Person getPerson(@PathVariable("Id") String Id) {
+        Optional<Person> person =  personService.getPerson(Id);
         return person.orElse(null);
     }
 
     /**
      * Update - Update an existing person
      *
-     * @param firstname - The firstname of the person to update
-     * @param lastname  - The lastname of the person to update
+     * @param Id Person's FirstName and LastName
      * @param person    - The person object is updated
      * @return person - The person object updated
      */
-    @PutMapping("person/{firstname}+{lastname}")
-    public Person updatePerson(@PathVariable("firstname") Person firstname, @PathVariable("lastname") Person lastname, @RequestBody Person person) {
-        Optional<Person> p = personService.getPersonByFirstNameAndLastName(firstname, lastname);
+    @PutMapping("{Id}")
+    public Person updatePerson(@PathVariable("Id") String Id,Person person) {
+        Optional<Person> p = personService.getPerson(Id);
         if (p.isPresent()) {
             Person currentPerson = p.get();
 
@@ -78,18 +93,16 @@ public class PersonController {
             return null;
         }
     }
-
     /**
+     * Delete - Delete a Person Object
      *
-     * @param firstname The firstname of the person to delete
-     * @param lastname  - The lastname of the person to delete
-     * @param person - The person object to delete
-     * @return method to delete person
+     * @param Id Person's FirstName and LastName
+     * @param person  The person object is deleted
+     * @return person - The Person is deleted
      */
-
-    @DeleteMapping("person/{firstname}+{lastname}")
-    public Person deletePerson(@PathVariable("firstname") Person firstname, @PathVariable("lastname") Person lastname, @RequestBody Person person) {
-        personService.getPersonByFirstNameAndLastName(firstname, lastname);
+    @DeleteMapping("{Id}")
+    public Person deletePerson(@PathVariable("Id") String Id,Person person) {
+        personService.getPerson(Id);
         return personService.deletePerson(person);
     }
 }

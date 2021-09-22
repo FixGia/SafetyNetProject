@@ -1,5 +1,4 @@
 package com.project.apisafetynet.Controller;
-
 import com.project.apisafetynet.Service.FireStationService;
 import com.project.apisafetynet.model.FireStation;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("firestations")
 public class FireStationController {
 
     final FireStationService fireStationService;
@@ -15,6 +15,10 @@ public class FireStationController {
         this.fireStationService = fireStationService;
     }
 
+    @GetMapping()
+    public Iterable<FireStation> getFirestations() {
+        return fireStationService.getFireStations();
+    }
     /**
      * Create a new fireStation
      *
@@ -22,21 +26,21 @@ public class FireStationController {
      *
      * @return create new fireStation
      */
-    @PostMapping("/fireStation")
-    public FireStation createFireStation(@RequestBody FireStation fireStation) {
+    @PostMapping()
+    public FireStation createFireStation(FireStation fireStation) {
         return fireStationService.saveFireStation(fireStation);
     }
 
     /**
      * Get fireStation by id
      *
-     * @param id of object fireStation
+     * @param Id of object fireStation
      *
      * @return get fireStation
      */
-    @GetMapping("/fireStation{id}")
-    public Optional<FireStation> getFireStation(@PathVariable("id") long id) {
-        return fireStationService.getFireStation(id);
+    @GetMapping("{Id}")
+    public Optional<FireStation> getFireStation(@PathVariable("Id") long Id) {
+        return fireStationService.getFireStation(Id);
     }
 
     /**
@@ -45,8 +49,8 @@ public class FireStationController {
      * @param id of object fireStation
      *
      */
-    @DeleteMapping("/fireStation{id}")
-    public void deleteFireStation(@PathVariable("id") long id) {
+    @DeleteMapping("{id}")
+    public void deleteFireStation(@PathVariable("id") Long id) {
         fireStationService.deleteFireStation(id);
     }
 
@@ -55,8 +59,8 @@ public class FireStationController {
      * @param id of object fireStation
      * @return an update FireStation
      */
-    @PutMapping("/fireStation{id}")
-    public FireStation updateFireStation(@PathVariable("id") long id) {
+    @PutMapping("{id}")
+    public FireStation updateFireStation(@PathVariable("id") Long id) {
         Optional<FireStation> f = fireStationService.getFireStation(id);
         if (f.isPresent()) {
             FireStation currentFireStation = f.get();

@@ -11,6 +11,8 @@ public interface FireStationService{
 
     FireStation saveFireStation(FireStation fireStation);
 
+    Iterable<FireStation> getFireStations();
+
     Optional<FireStation> getFireStation(long id);
 
     void deleteFireStation(long id);

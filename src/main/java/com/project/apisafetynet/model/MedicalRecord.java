@@ -10,8 +10,7 @@ import javax.persistence.*;
 public class MedicalRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    public String id;
     public String firstname;
     public String lastname;
     public String birthdate;
@@ -19,7 +18,8 @@ public class MedicalRecord {
     public String allergies;
 
 
-    public MedicalRecord( String firstname, String lastname, String birthdate, String medications, String allergies) {
+    public MedicalRecord(String firstname, String lastname, String birthdate, String medications, String allergies) {
+        this.id = firstname+","+lastname;
         this.firstname = firstname;
         this.lastname = lastname;
         this.birthdate = birthdate;

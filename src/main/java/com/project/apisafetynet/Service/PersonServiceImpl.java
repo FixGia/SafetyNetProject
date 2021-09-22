@@ -5,7 +5,6 @@ import com.project.apisafetynet.Repository.PersonRepository;
 import com.project.apisafetynet.model.Person;
 import lombok.Data;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -43,11 +42,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Optional<Person> getPersonByFirstNameAndLastName(Person firstname, Person lastname) {
-        return personRepository.findPersonByFirstNameAndLastName(firstname,lastname);
+    public Optional<Person> getPerson(String Id) {
+        return personRepository.findById(Id);
 
     }
 
 
-
 }
+

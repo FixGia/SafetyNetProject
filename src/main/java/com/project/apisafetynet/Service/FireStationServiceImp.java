@@ -10,7 +10,8 @@ import java.util.Optional;
 @Data
 public class FireStationServiceImp implements FireStationService {
 
-    final FireStationRepository fireStationRepository;
+    final
+    FireStationRepository fireStationRepository;
 
     public FireStationServiceImp(FireStationRepository fireStationRepository) {
         this.fireStationRepository = fireStationRepository;
@@ -28,8 +29,13 @@ public class FireStationServiceImp implements FireStationService {
     }
 
     @Override
+    public Iterable<FireStation> getFireStations() {
+        return this.fireStationRepository.findAll();
+    }
+
+    @Override
     public Optional<FireStation> getFireStation(long id) {
-       return this.fireStationRepository.findById(id);
+        return this.fireStationRepository.findById(id);
     }
 
     @Override

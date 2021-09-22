@@ -6,6 +6,7 @@ import com.project.apisafetynet.model.MedicalRecord;
 import com.project.apisafetynet.model.Person;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Component
+@Service
 public class LoadJsonFile {
 
     private static String filePath = "src/main/resources/data.json";
@@ -29,7 +30,7 @@ public class LoadJsonFile {
         LoadJsonFile.medicalRecordService = medicalRecordService;
     }
 
-    public static void readPersons() throws IOException {
+    public void readPersons() throws IOException {
 
         bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
@@ -53,7 +54,7 @@ public class LoadJsonFile {
     }
 
 
-    public static void readFireStation() throws IOException {
+    public void readFireStation() throws IOException {
 
         bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
@@ -67,7 +68,7 @@ public class LoadJsonFile {
 
 
     }
-    public static void readMedicalRecords() throws IOException {
+    public void readMedicalRecords() throws IOException {
         bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
         Any any = iter.readAny();

@@ -16,7 +16,8 @@ public interface PersonService {
 
     Person savePerson(Person person);
 
-    Optional<Person> getPersonByFirstNameAndLastName(Person firstname, Person lastname);
+    Optional<Person> getPerson(String Id);
+
 
     }
 

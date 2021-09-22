@@ -9,11 +9,9 @@ import javax.persistence.*;
 @Entity
 public class FireStation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-    @Column
     public String address;
-    @Column
     public String station;
 
 
