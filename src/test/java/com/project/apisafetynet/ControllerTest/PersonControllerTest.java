@@ -1,4 +1,4 @@
-package com.project.apisafetynet;
+package com.project.apisafetynet.ControllerTest;
 import com.project.apisafetynet.Controller.PersonController;
 import com.project.apisafetynet.Service.LoadJsonFile;
 import com.project.apisafetynet.Service.PersonService;

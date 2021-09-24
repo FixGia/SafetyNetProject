@@ -1,4 +1,4 @@
-package com.project.apisafetynet;
+package com.project.apisafetynet.ControllerTest;
 
 import com.project.apisafetynet.Controller.MedicalRecordController;
 import com.project.apisafetynet.Service.LoadJsonFile;

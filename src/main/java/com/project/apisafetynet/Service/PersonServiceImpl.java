@@ -5,6 +5,8 @@ import com.project.apisafetynet.Repository.PersonRepository;
 import com.project.apisafetynet.model.Person;
 import lombok.Data;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ public class PersonServiceImpl implements PersonService {
         this.personRepository = personRepository;
     }
 
+
     @Override
     public void SavePersons(List<Person> personsList) {
         this.personRepository.saveAll(personsList);
@@ -30,9 +33,9 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person deletePerson(Person person) {
+    public void deletePerson(Person person) {
         this.personRepository.delete(person);
-        return person;
+
     }
 
     @Override
@@ -44,6 +47,20 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Optional<Person> getPerson(String Id) {
         return personRepository.findById(Id);
+
+    }
+
+    @Override
+    public ArrayList<String> getEmailPersonByCity(String city) {
+        ArrayList<Person> personsLiveInThisCity = personRepository.findPersonByCity(city);
+        ArrayList<String> emailListOfPersonsLiveInThisCity = new ArrayList<>();
+        if (personsLiveInThisCity.isEmpty()) {
+            return emailListOfPersonsLiveInThisCity;
+        }
+        for (Person person : personsLiveInThisCity) {
+            emailListOfPersonsLiveInThisCity.add(person.getEmail());
+        }
+        return emailListOfPersonsLiveInThisCity;
 
     }
 

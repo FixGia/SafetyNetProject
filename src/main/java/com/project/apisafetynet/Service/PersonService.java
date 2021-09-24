@@ -3,6 +3,7 @@ package com.project.apisafetynet.Service;
 
 import com.project.apisafetynet.model.Person;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,12 +13,13 @@ public interface PersonService {
 
     Iterable<Person> getPersons();
 
-    Person deletePerson(Person person);
+    void deletePerson(Person person);
 
     Person savePerson(Person person);
 
     Optional<Person> getPerson(String Id);
 
+    ArrayList<String> getEmailPersonByCity(String city);
 
     }
 

@@ -11,12 +11,19 @@ public class Person {
 
     @Id
     public String Id;
+    @Column
     public String firstName;
+    @Column
     public String lastName;
+    @Column
     public String address;
+    @Column
     public String city;
+    @Column
     public String zip;
+    @Column
     public String phone;
+    @Column
     public String email;
 
 

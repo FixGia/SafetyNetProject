@@ -1,4 +1,4 @@
-package com.project.apisafetynet;
+package com.project.apisafetynet.ControllerTest;
 import com.project.apisafetynet.Controller.FireStationController;
 import com.project.apisafetynet.Service.FireStationService;
 import com.project.apisafetynet.Service.LoadJsonFile;
