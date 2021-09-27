@@ -19,5 +19,4 @@ public interface MedicalRecordService {
 
   MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord);
 
-
 }

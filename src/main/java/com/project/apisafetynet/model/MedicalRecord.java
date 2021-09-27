@@ -1,5 +1,6 @@
 package com.project.apisafetynet.model;
 
+import com.project.apisafetynet.Service.CalculateAgeService;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class MedicalRecord {
     public String birthdate;
     public String medications;
     public String allergies;
+
 
 
     public MedicalRecord(String firstname, String lastname, String birthdate, String medications, String allergies) {
@@ -51,6 +53,7 @@ public class MedicalRecord {
         this.allergies=allergies;
         return this;
     }
+
     public MedicalRecord build () {
         return new MedicalRecord(firstname,lastname,birthdate,medications,allergies);
     }

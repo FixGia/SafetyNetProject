@@ -122,12 +122,6 @@ public class PersonController {
     }
 
 
-    @GetMapping("/communityEmail")
-    public ArrayList<String> getEmailOfCityCulver(@RequestParam String city) {
-        ArrayList<String> listCity;
-            listCity = personService.getEmailPersonByCity(city);
-            return listCity;
-    }
 
 
 

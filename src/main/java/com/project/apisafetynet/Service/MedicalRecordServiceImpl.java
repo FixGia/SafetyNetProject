@@ -5,6 +5,12 @@ import com.project.apisafetynet.model.MedicalRecord;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.basic.BasicMenuItemUI;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +49,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     public MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord) {
         return medicalRecordRepository.save(medicalRecord);
     }
+
+
 
 }
