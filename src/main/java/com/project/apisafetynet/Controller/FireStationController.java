@@ -1,8 +1,8 @@
 package com.project.apisafetynet.Controller;
 import com.project.apisafetynet.Service.FireStationService;
+import com.project.apisafetynet.Service.PersonService;
 import com.project.apisafetynet.model.FireStation;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 @RestController
@@ -10,9 +10,11 @@ import java.util.Optional;
 public class FireStationController {
 
     final FireStationService fireStationService;
+    final PersonService personService;
 
-    public FireStationController(FireStationService fireStationService) {
+    public FireStationController(FireStationService fireStationService, PersonService personService) {
         this.fireStationService = fireStationService;
+        this.personService = personService;
     }
 
     @GetMapping()
@@ -81,6 +83,8 @@ public class FireStationController {
         }
 
     }
-}
+
+    }
+
 
 

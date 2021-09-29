@@ -15,12 +15,14 @@ public interface PersonService {
 
     void deletePerson(Person person);
 
-    Person savePerson(Person person);
+
+    Person savePerson(Person person, String Id);
 
     Optional<Person> getPerson(String Id);
 
     ArrayList<String> getEmailPersonByCity(String city);
 
+    ArrayList<String> getPersonInformation(String address);
 
     }
 

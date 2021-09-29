@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public interface PersonRepository extends CrudRepository<Person,String> {
 
     ArrayList<Person> findPersonByCity(String city);
+
     ArrayList<Person> findPersonByAddress(String address);
 
 

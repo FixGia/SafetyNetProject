@@ -39,8 +39,9 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person savePerson(Person person) {
+    public Person savePerson(Person person, String Id) {
         this.personRepository.save(person);
+        person.setId(Id);
         return person;
     }
 
@@ -64,5 +65,18 @@ public class PersonServiceImpl implements PersonService {
 
     }
 
+    @Override
+    public ArrayList<String> getPersonInformation(String address) {
+        ArrayList<Person> personLiveAtThisAddress = personRepository.findPersonByAddress(address);
+        ArrayList<String> personInformation = new ArrayList<>();
+        if (personLiveAtThisAddress.isEmpty()) {
+            return personInformation;
+        }
+        for(Person person : personLiveAtThisAddress) {
+            personInformation.add(person.getFirstName().concat(person.getLastName().concat(person.getAddress().concat(person.getPhone()))));
+        }
+        return personInformation;
     }
+
+}
 

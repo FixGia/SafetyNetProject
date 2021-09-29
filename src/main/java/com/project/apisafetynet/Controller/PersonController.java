@@ -41,7 +41,7 @@ public class PersonController {
 
         Optional<Person> p = personService.getPerson(Id);
         if (p.isEmpty()) {
-            Person currentPerson = personService.savePerson(person);
+            Person currentPerson = personService.savePerson(person,Id);
             return currentPerson;
         } else {
             return null;
@@ -101,7 +101,7 @@ public class PersonController {
             if (phone != null) {
                 currentPerson.setPhone(phone);
             }
-            personService.savePerson(currentPerson);
+            personService.savePerson(currentPerson,Id);
             return currentPerson;
         } else {
             return null;

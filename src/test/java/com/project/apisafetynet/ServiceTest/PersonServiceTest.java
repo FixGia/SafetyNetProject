@@ -6,42 +6,57 @@ import com.project.apisafetynet.Service.PersonServiceImpl;
 import com.project.apisafetynet.model.Person;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-
-
-import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
+@ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
 
-    private Person person;
+    private Person person ;
+    private List<Person> personArrayList = new ArrayList<>();
 
-    private static PersonServiceImpl personService;
 
     @Mock
-    private static PersonRepository personRepository;
+    private PersonRepository personRepository;
+    @InjectMocks
+    private PersonServiceImpl personService;
 
 
     @BeforeEach
     private void setUpBeforeAllTests() {
-        personRepository = mock(PersonRepository.class);
-        personService = new PersonServiceImpl(personRepository);
+        person =  new Person();
+        person.setId("Jack,Jekyll");
+        person.setFirstName("Jack");
+        person.setLastName("Jekyll");
+        person.setAddress("33 rue du test");
+        person.setZip("0000");
+        person.setPhone("00000000");
+        person.setCity("TestVille");
+        person.email("Test@PersonTest.com");
+        personArrayList.add(person);
+
+        lenient().when(personRepository.findAll()).thenReturn(personArrayList);
+        //@FIXME this mock have to be corrected
+        lenient().when(personRepository.save(person)).thenCallRealMethod();
 
     }
     @Test
     public void getPersonsTest() {
-        ArrayList<Person> personArrayList = new ArrayList<>();
-        personArrayList.add(person);
-        when(personRepository.findAll()).thenReturn(personArrayList);
         Iterable<Person> personList = personService.getPersons();
         assertNotNull(personList);
         assertEquals(personArrayList, personList);
+    }
+
+    @Test
+    public void CreatePersonTest() {
+
     }
 
     @Test
@@ -61,16 +76,6 @@ public class PersonServiceTest {
 
     }
     @Test
-    public void CreatePersonTest() {
-        ArrayList<Person> personArrayList = new ArrayList<>();
-        personArrayList.add(person);
-        Person person1 = new Person();
-        personService.savePerson(person1);
-        personArrayList.add(person1);
-        assertEquals(personArrayList.size(), 2) ;
-
-    }
-    @Test
     public void GetPersonTest() {
         ArrayList<Person> personArrayList = new ArrayList<>();
         personArrayList.add(person);
@@ -80,4 +85,3 @@ public class PersonServiceTest {
     }
 
 }
-

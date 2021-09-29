@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class Child {
-    private String firstName;
-    private String lastName;
-    private int age ;
+
+    private String Id;
+    private String age ;
+
 }

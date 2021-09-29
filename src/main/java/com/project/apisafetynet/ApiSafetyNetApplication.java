@@ -1,7 +1,7 @@
 package com.project.apisafetynet;
 
+import com.project.apisafetynet.Service.FireStationService;
 import com.project.apisafetynet.Service.LoadJsonFile;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,8 +11,10 @@ public class ApiSafetyNetApplication implements CommandLineRunner {
 
     final LoadJsonFile loadJsonFile;
 
+
     public ApiSafetyNetApplication(LoadJsonFile loadJsonFile) {
         this.loadJsonFile = loadJsonFile;
+
     }
 
     public static void main(String[] args) {
@@ -25,6 +27,7 @@ public class ApiSafetyNetApplication implements CommandLineRunner {
         loadJsonFile.readPersons();
         loadJsonFile.readFireStation();
         loadJsonFile.readMedicalRecords();
+
 
     }
 }
