@@ -1,9 +1,11 @@
 package com.project.apisafetynet.Service;
 
 
+import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
-import com.project.apisafetynet.model.Person;
+import com.project.apisafetynet.model.*;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,9 +18,13 @@ import java.util.Optional;
 public class PersonServiceImpl implements PersonService {
 
     final PersonRepository personRepository;
+    final MedicalRecordRepository medicalRecordRepository;
+   final CalculateAgeService calculateAgeService;
 
-    public PersonServiceImpl(PersonRepository personRepository) {
+    public PersonServiceImpl(PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository, CalculateAgeService calculateAgeService) {
         this.personRepository = personRepository;
+        this.medicalRecordRepository = medicalRecordRepository;
+        this.calculateAgeService = calculateAgeService;
     }
 
 
@@ -66,17 +72,60 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public ArrayList<String> getPersonInformation(String address) {
-        ArrayList<Person> personLiveAtThisAddress = personRepository.findPersonByAddress(address);
-        ArrayList<String> personInformation = new ArrayList<>();
-        if (personLiveAtThisAddress.isEmpty()) {
-            return personInformation;
+    public ArrayList<PersonInformation> getPersonInformation(String firstName,String lastName) {
+        ArrayList<Person> personWithSpecificName = personRepository.findPersonByFirstNameAndLastName(firstName, lastName);
+        ArrayList<PersonInformation> personInformationList = new ArrayList<>();
+        if (personWithSpecificName.isEmpty()) {
+            return personInformationList;
         }
-        for(Person person : personLiveAtThisAddress) {
-            personInformation.add(person.getFirstName().concat(person.getLastName().concat(person.getAddress().concat(person.getPhone()))));
+        for(Person person : personWithSpecificName) {
+            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
+            Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+            int age = calculateAgeService.CalculateAge(CalculateAge);
+            PersonInformation personInformation = new PersonInformation();
+            personInformation.setFirstName(person.getFirstName());
+            personInformation.setLastName(person.getLastName());
+            personInformation.setAddress(person.getAddress());
+            personInformation.setAge(age);
+            personInformation.setEmail(person.getEmail());
+            personInformation.setAllergies(medicalRecord.get().getAllergies());
+            personInformation.setMedications(medicalRecord.get().getMedications());
+            personInformationList.add(personInformation);
         }
-        return personInformation;
+        return personInformationList;
     }
 
+
+    public Optional<ChildrenAndFamilyMembers> getListOfChildrenAndFamilyMembersByAddress(String address) {
+        ArrayList<Person> personAtThisAddress = personRepository.findPersonByAddress(address);
+        if (personAtThisAddress.isEmpty()) {
+            return Optional.empty();
+        }
+        ChildrenAndFamilyMembers childrenAndFamilyMembers = buildChildrenAndFamilyMembers(personAtThisAddress);
+        if (childrenAndFamilyMembers.getChildrenArrayList().isEmpty()) {
+            return Optional.of(new ChildrenAndFamilyMembers(new ArrayList<>(), new ArrayList<>()));
+        }
+        return Optional.of(childrenAndFamilyMembers);
+    }
+
+    public ChildrenAndFamilyMembers buildChildrenAndFamilyMembers(@NotNull ArrayList<Person> personAtThisAddress) {
+        ArrayList<Child> childrenArrayList = new ArrayList<>();
+        ArrayList<FamilyMembers> familyMembersList = new ArrayList<>();
+        for (Person person : personAtThisAddress) {
+            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
+            int age = -1;
+            if (medicalRecord.isPresent()) {
+                Age CalculateAge= new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+                age = calculateAgeService.CalculateAge(CalculateAge);
+            }
+            if (age < 19 && age != -1) {
+                childrenArrayList.add(new Child(person.getFirstName(), person.getLastName(), age));
+            } else {
+                familyMembersList.add(new FamilyMembers(person.getFirstName(), person.getLastName()));
+
+            }
+        }
+        return new ChildrenAndFamilyMembers(childrenArrayList, familyMembersList);
+    }
 }
 

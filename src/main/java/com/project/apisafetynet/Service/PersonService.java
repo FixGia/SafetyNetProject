@@ -1,7 +1,9 @@
 package com.project.apisafetynet.Service;
 
 
+import com.project.apisafetynet.model.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.Person;
+import com.project.apisafetynet.model.PersonInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,8 @@ public interface PersonService {
 
     ArrayList<String> getEmailPersonByCity(String city);
 
-    ArrayList<String> getPersonInformation(String address);
+    ArrayList<PersonInformation> getPersonInformation(String firstName, String lastName);
 
+    Optional<ChildrenAndFamilyMembers> getListOfChildrenAndFamilyMembersByAddress(String address);
     }
 

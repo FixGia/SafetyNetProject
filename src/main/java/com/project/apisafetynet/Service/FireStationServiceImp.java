@@ -4,6 +4,7 @@ import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
 import com.project.apisafetynet.model.*;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,33 +67,34 @@ public class FireStationServiceImp implements FireStationService {
         }
         ArrayList<PersonCoveredByFireStation> personListByStation = new ArrayList<>();
         InfoByZone infoByZone = new InfoByZone();
+        int adults = 0;
+        int child = 0;
         for (FireStation fireStation : getFireStationNumber) {
             ArrayList<Person> personArrayList = personRepository.findPersonByAddress(fireStation.getAddress());
             for (Person person : personArrayList) {
                 PersonCoveredByFireStation personCoveredByStation = new PersonCoveredByFireStation();
-                personCoveredByStation.setFirstName(person.getFirstName());
-                personCoveredByStation.setLastName(person.getLastName());
-                personCoveredByStation.setAddress(person.getAddress());
-                personCoveredByStation.setPhone(person.getPhone());
-                personCoveredByStation.setId(person.getId());
-                personListByStation.add(personCoveredByStation);
-                String firstName = personCoveredByStation.getFirstName();
-                String lastname = personCoveredByStation.getLastName();
-                Optional<MedicalRecord> medicalRecordsList = medicalRecordRepository.findAllByFirstnameAndLastname(firstName, lastname);
-                int adults = 0;
-                int child = 0;
-                Age CalculateAge = new Age(medicalRecordsList.get().getBirthdate(), "MM/dd/yyyy");
-                int age = calculateAgeService.CalculateAge(CalculateAge);
-                if (age >= 19) {
-                    adults++;
-                } else {
-                    child++;
-                }
-                infoByZone.setAdults(adults);
-                infoByZone.setChild(child);
-                infoByZone.setPersonCoveredByFireStation(personListByStation);
-            }
+                    personCoveredByStation.setFirstName(person.getFirstName());
+                    personCoveredByStation.setLastName(person.getLastName());
+                    personCoveredByStation.setAddress(person.getAddress());
+                    personCoveredByStation.setPhone(person.getPhone());
+                    personListByStation.add(personCoveredByStation);
+                    ArrayList<MedicalRecord> medicalRecordsList = medicalRecordRepository.findMedicalRecordByFirstnameAndLastname(personCoveredByStation.getFirstName(), personCoveredByStation.getLastName());
+                    for (MedicalRecord medicalRecord : medicalRecordsList) {
+                        String birthDate = medicalRecord.getBirthdate();
+                        Age CalculateAge = new Age(birthDate, "MM/dd/yyyy");
+                        int age = calculateAgeService.CalculateAge(CalculateAge);
+                        if (age < 18 ) {
+                            child++;
+                        } else {
+                            adults++;
+                        }
+                    }
 
+                    infoByZone.setAdults(adults);
+                    infoByZone.setChild(child);
+                    infoByZone.setPersonCoveredByFireStation(personListByStation);
+
+            }
         }
         return Optional.of(infoByZone);
     }
@@ -105,7 +107,6 @@ public class FireStationServiceImp implements FireStationService {
             ArrayList<Person> personArrayList = personRepository.findPersonByAddress(fireStation.getAddress());
             for (Person person : personArrayList) {
                 PhoneAlert phoneNumberByStation = new PhoneAlert();
-                person.getPhone();
                 phoneNumberByStation.setPhone(person.getPhone());
                 personPhoneNumberByStation.add(phoneNumberByStation);
                 System.out.println(personArrayList);
@@ -137,6 +138,42 @@ public class FireStationServiceImp implements FireStationService {
         }
         return personAndFireStationNumberWhoServedHimArrayList;
     }
+
+    public ArrayList<Flood> getListOfFloodsByStations (@NotNull ArrayList<String> stations) {
+        ArrayList<Flood> floodArrayList = new ArrayList<>();
+        for (String station : stations) {
+        ArrayList<FireStation> getFireStation= fireStationRepository.findFireStationByStation(station);
+            if (!getFireStation.isEmpty()) {
+                for (FireStation fireStation : getFireStation) {
+                    ArrayList<Person> getPersonByAddress= personRepository.findPersonByAddress(fireStation.getAddress());
+                    ArrayList<FloodMembers> FloodMemberArrayList = buildFloodMemberList(getPersonByAddress);
+                    Flood flood = new Flood(fireStation.getAddress(), FloodMemberArrayList);
+                    floodArrayList.add(flood);
+                }
+            }
+        }
+        return floodArrayList;
+    }
+
+    public ArrayList<FloodMembers> buildFloodMemberList(@NotNull ArrayList<Person> getPersonByAddress) {
+
+        ArrayList<FloodMembers> floodMembersArrayList= new ArrayList<>();
+        for ( Person person : getPersonByAddress) {
+            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
+            FloodMembers floodMembers = new FloodMembers();
+            Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+            int age = calculateAgeService.CalculateAge(CalculateAge);
+            floodMembers.setFirstName(person.getFirstName());
+            floodMembers.setLastName(person.getLastName());
+            floodMembers.setPhone(person.getPhone());
+            floodMembers.setAge(age);
+            floodMembers.setMedications(medicalRecord.get().getMedications());
+            floodMembers.setAllergies(medicalRecord.get().getAllergies());
+            floodMembersArrayList.add(floodMembers);
+        }
+        return floodMembersArrayList;
+    }
+
 }
 
 

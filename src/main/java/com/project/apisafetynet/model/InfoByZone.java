@@ -1,13 +1,13 @@
 package com.project.apisafetynet.model;
 
 import lombok.Data;
-import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
 public class InfoByZone {
 
-    ArrayList<PersonCoveredByFireStation> personCoveredByFireStation;
-    int adults;
-    int child;
+    List<PersonCoveredByFireStation> personCoveredByFireStation;
+    long adults;
+    long child;
 }

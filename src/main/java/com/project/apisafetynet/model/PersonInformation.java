@@ -6,9 +6,10 @@ import lombok.Data;
 @Data
 public class PersonInformation {
 
-    private String Id;
+    private String firstName;
+    private String lastName;
     private String address;
-    private String age;
+    private int age;
     private String email;
     private String medications;
     private String allergies;
