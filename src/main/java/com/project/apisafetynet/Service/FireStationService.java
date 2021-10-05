@@ -1,6 +1,10 @@
 package com.project.apisafetynet.Service;
 
-import com.project.apisafetynet.model.*;
+import com.project.apisafetynet.model.Flood;
+import com.project.apisafetynet.model.InfoByZone;
+import com.project.apisafetynet.model.PersonsAndFireStationWhoDeservedThem;
+import com.project.apisafetynet.model.PhoneAlert;
+import com.project.apisafetynet.model.ModelRepository.FireStation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +21,6 @@ public interface FireStationService{
     Optional<FireStation> getFireStation(long id);
 
     void deleteFireStation(long id);
-
-    ArrayList<FireStation> getFireStationByStation(String station);
 
     Optional<InfoByZone> getListPersonInformationByFireStation(String station);
 

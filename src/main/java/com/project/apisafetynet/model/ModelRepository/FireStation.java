@@ -1,4 +1,4 @@
-package com.project.apisafetynet.model;
+package com.project.apisafetynet.model.ModelRepository;
 
 
 import lombok.Data;

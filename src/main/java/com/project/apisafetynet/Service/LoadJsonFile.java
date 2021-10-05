@@ -1,11 +1,10 @@
 package com.project.apisafetynet.Service;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-import com.project.apisafetynet.model.FireStation;
-import com.project.apisafetynet.model.MedicalRecord;
-import com.project.apisafetynet.model.Person;
+import com.project.apisafetynet.model.ModelRepository.FireStation;
+import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.Person;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

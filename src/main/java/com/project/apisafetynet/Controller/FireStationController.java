@@ -1,7 +1,7 @@
 package com.project.apisafetynet.Controller;
 import com.project.apisafetynet.Service.FireStationService;
 import com.project.apisafetynet.Service.PersonService;
-import com.project.apisafetynet.model.FireStation;
+import com.project.apisafetynet.model.ModelRepository.FireStation;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 

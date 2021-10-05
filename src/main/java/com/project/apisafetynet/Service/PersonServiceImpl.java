@@ -3,7 +3,12 @@ package com.project.apisafetynet.Service;
 
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
-import com.project.apisafetynet.model.*;
+import com.project.apisafetynet.model.Child;
+import com.project.apisafetynet.model.ChildrenAndFamilyMembers;
+import com.project.apisafetynet.model.FamilyMembers;
+import com.project.apisafetynet.model.PersonInformation;
+import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.Person;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -72,7 +77,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public ArrayList<PersonInformation> getPersonInformation(String firstName,String lastName) {
+    public ArrayList<PersonInformation> getPersonInformation(String firstName, String lastName) {
         ArrayList<Person> personWithSpecificName = personRepository.findPersonByFirstNameAndLastName(firstName, lastName);
         ArrayList<PersonInformation> personInformationList = new ArrayList<>();
         if (personWithSpecificName.isEmpty()) {
@@ -80,7 +85,7 @@ public class PersonServiceImpl implements PersonService {
         }
         for(Person person : personWithSpecificName) {
             Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
-            Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+            PersonInformation.Age CalculateAge = new PersonInformation.Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
             int age = calculateAgeService.CalculateAge(CalculateAge);
             PersonInformation personInformation = new PersonInformation();
             personInformation.setFirstName(person.getFirstName());
@@ -115,7 +120,7 @@ public class PersonServiceImpl implements PersonService {
             Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
             int age = -1;
             if (medicalRecord.isPresent()) {
-                Age CalculateAge= new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+                PersonInformation.Age CalculateAge= new PersonInformation.Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
                 age = calculateAgeService.CalculateAge(CalculateAge);
             }
             if (age < 19 && age != -1) {

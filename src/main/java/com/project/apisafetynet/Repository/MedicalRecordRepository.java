@@ -1,6 +1,6 @@
 package com.project.apisafetynet.Repository;
 
-import com.project.apisafetynet.model.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

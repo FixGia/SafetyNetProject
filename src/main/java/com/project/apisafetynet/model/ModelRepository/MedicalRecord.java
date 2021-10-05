@@ -1,6 +1,5 @@
-package com.project.apisafetynet.model;
+package com.project.apisafetynet.model.ModelRepository;
 
-import com.project.apisafetynet.Service.CalculateAgeService;
 import lombok.Data;
 
 import javax.persistence.*;

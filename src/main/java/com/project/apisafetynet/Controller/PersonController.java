@@ -1,12 +1,9 @@
 package com.project.apisafetynet.Controller;
 
 import com.project.apisafetynet.Service.PersonService;
-import com.project.apisafetynet.model.Person;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.project.apisafetynet.model.ModelRepository.Person;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
@@ -67,7 +64,7 @@ public class PersonController {
      * @param person - The person object is updated
      * @return person - The person object updated
      */
-    @PatchMapping("{Id}")
+    @PutMapping("{Id}")
     public Person updatePerson(@PathVariable("Id") String Id, Person person) {
         Optional<Person> p = personService.getPerson(Id);
         if (p.isPresent()) {

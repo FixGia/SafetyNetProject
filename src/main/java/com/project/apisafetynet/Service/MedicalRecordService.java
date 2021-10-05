@@ -1,7 +1,6 @@
 package com.project.apisafetynet.Service;
 
-import com.project.apisafetynet.model.MedicalRecord;
-import com.project.apisafetynet.model.Person;
+import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 
 import java.util.List;
 import java.util.Optional;

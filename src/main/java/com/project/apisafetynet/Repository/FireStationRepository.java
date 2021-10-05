@@ -1,7 +1,7 @@
 package com.project.apisafetynet.Repository;
 
 
-import com.project.apisafetynet.model.FireStation;
+import com.project.apisafetynet.model.ModelRepository.FireStation;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

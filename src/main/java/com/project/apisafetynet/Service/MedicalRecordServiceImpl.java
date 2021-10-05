@@ -1,16 +1,10 @@
 package com.project.apisafetynet.Service;
 
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
-import com.project.apisafetynet.model.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
-import javax.swing.plaf.basic.BasicMenuItemUI;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

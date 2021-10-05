@@ -1,9 +1,9 @@
 package com.project.apisafetynet.Service;
 
-import com.project.apisafetynet.model.Age;
+import com.project.apisafetynet.model.PersonInformation;
 
 public interface CalculateAgeService {
 
-    int CalculateAge(Age age);
+    int CalculateAge(PersonInformation.Age age);
 
 }

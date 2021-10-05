@@ -2,7 +2,7 @@ package com.project.apisafetynet.Service;
 
 
 import com.project.apisafetynet.model.ChildrenAndFamilyMembers;
-import com.project.apisafetynet.model.Person;
+import com.project.apisafetynet.model.ModelRepository.Person;
 import com.project.apisafetynet.model.PersonInformation;
 
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ public interface PersonService {
 
     void deletePerson(Person person);
 
-
     Person savePerson(Person person, String Id);
 
     Optional<Person> getPerson(String Id);
@@ -27,5 +26,6 @@ public interface PersonService {
     ArrayList<PersonInformation> getPersonInformation(String firstName, String lastName);
 
     Optional<ChildrenAndFamilyMembers> getListOfChildrenAndFamilyMembersByAddress(String address);
+
     }
 

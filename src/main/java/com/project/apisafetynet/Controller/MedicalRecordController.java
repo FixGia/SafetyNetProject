@@ -1,7 +1,7 @@
 package com.project.apisafetynet.Controller;
 
 import com.project.apisafetynet.Service.MedicalRecordService;
-import com.project.apisafetynet.model.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;

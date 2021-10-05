@@ -3,6 +3,9 @@ import com.project.apisafetynet.Repository.FireStationRepository;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
 import com.project.apisafetynet.model.*;
+import com.project.apisafetynet.model.ModelRepository.FireStation;
+import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.Person;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -54,12 +57,11 @@ public class FireStationServiceImp implements FireStationService {
         this.fireStationRepository.deleteById(id);
     }
 
-    @Override
-    public ArrayList<FireStation> getFireStationByStation(String station) {
-        return fireStationRepository.findFireStationByStation(station);
-    }
-
-    //@FIXME Modify Method's to count every MedicalRecord. Not just the first
+    /**
+     * Method which used to get a list Of Person Information By station
+     * @param station FireStation's number
+     * @return A List of every person's covered by station's number with their information plus child's number and adult's number
+     */
     public Optional<InfoByZone> getListPersonInformationByFireStation(String station) {
         ArrayList<FireStation> getFireStationNumber = fireStationRepository.findFireStationByStation(station);
         if (getFireStationNumber.isEmpty()) {
@@ -81,7 +83,7 @@ public class FireStationServiceImp implements FireStationService {
                     ArrayList<MedicalRecord> medicalRecordsList = medicalRecordRepository.findMedicalRecordByFirstnameAndLastname(personCoveredByStation.getFirstName(), personCoveredByStation.getLastName());
                     for (MedicalRecord medicalRecord : medicalRecordsList) {
                         String birthDate = medicalRecord.getBirthdate();
-                        Age CalculateAge = new Age(birthDate, "MM/dd/yyyy");
+                        PersonInformation.Age CalculateAge = new PersonInformation.Age(birthDate, "MM/dd/yyyy");
                         int age = calculateAgeService.CalculateAge(CalculateAge);
                         if (age < 18 ) {
                             child++;
@@ -99,6 +101,11 @@ public class FireStationServiceImp implements FireStationService {
         return Optional.of(infoByZone);
     }
 
+    /**
+     *
+     * @param station
+     * @return
+     */
     public ArrayList<PhoneAlert> getPhoneNumberByStation(String station) {
 
         ArrayList<FireStation> getFireStationNumber = fireStationRepository.findFireStationByStation(station);
@@ -109,12 +116,17 @@ public class FireStationServiceImp implements FireStationService {
                 PhoneAlert phoneNumberByStation = new PhoneAlert();
                 phoneNumberByStation.setPhone(person.getPhone());
                 personPhoneNumberByStation.add(phoneNumberByStation);
-                System.out.println(personArrayList);
+
             }
         }
         return personPhoneNumberByStation;
     }
 
+    /**
+     *
+     * @param address
+     * @return
+     */
     public ArrayList<PersonsAndFireStationWhoDeservedThem> getPersonListAndStationNumber(String address) {
         ArrayList<Person> personListByAddress = personRepository.findPersonByAddress(address);
         ArrayList<PersonsAndFireStationWhoDeservedThem> personAndFireStationNumberWhoServedHimArrayList = new ArrayList<>();
@@ -123,7 +135,7 @@ public class FireStationServiceImp implements FireStationService {
         }
         for (Person person : personListByAddress) {
             Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
-            Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+            PersonInformation.Age CalculateAge = new PersonInformation.Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
             int age = calculateAgeService.CalculateAge(CalculateAge);
             Optional<FireStation> getFireStation = fireStationRepository.findFireStationByAddress(person.getAddress());
             PersonsAndFireStationWhoDeservedThem personsAndFireStationWhoDeservedThem = new PersonsAndFireStationWhoDeservedThem();
@@ -139,6 +151,11 @@ public class FireStationServiceImp implements FireStationService {
         return personAndFireStationNumberWhoServedHimArrayList;
     }
 
+    /**
+     *
+     * @param stations
+     * @return
+     */
     public ArrayList<Flood> getListOfFloodsByStations (@NotNull ArrayList<String> stations) {
         ArrayList<Flood> floodArrayList = new ArrayList<>();
         for (String station : stations) {
@@ -155,13 +172,18 @@ public class FireStationServiceImp implements FireStationService {
         return floodArrayList;
     }
 
+    /**
+     *
+     * @param getPersonByAddress
+     * @return
+     */
     public ArrayList<FloodMembers> buildFloodMemberList(@NotNull ArrayList<Person> getPersonByAddress) {
 
         ArrayList<FloodMembers> floodMembersArrayList= new ArrayList<>();
         for ( Person person : getPersonByAddress) {
             Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
             FloodMembers floodMembers = new FloodMembers();
-            Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+            PersonInformation.Age CalculateAge = new PersonInformation.Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
             int age = calculateAgeService.CalculateAge(CalculateAge);
             floodMembers.setFirstName(person.getFirstName());
             floodMembers.setLastName(person.getLastName());
