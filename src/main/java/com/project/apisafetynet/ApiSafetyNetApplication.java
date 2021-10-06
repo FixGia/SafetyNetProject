@@ -29,5 +29,7 @@ public class ApiSafetyNetApplication implements CommandLineRunner {
         loadJsonFile.readMedicalRecords();
 
 
+
+
     }
 }

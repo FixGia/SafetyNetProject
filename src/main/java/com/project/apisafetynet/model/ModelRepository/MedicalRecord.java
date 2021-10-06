@@ -3,6 +3,7 @@ package com.project.apisafetynet.model.ModelRepository;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -10,17 +11,21 @@ import javax.persistence.*;
 public class MedicalRecord {
 
     @Id
-    public String id;
-    public String firstname;
-    public String lastname;
-    public String birthdate;
-    public String medications;
-    public String allergies;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+    private String firstname;
+    private String lastname;
+    private String birthdate;
+    private String medications;
+
+    @OneToMany
+    private List<Allergies> allergies;
 
 
 
-    public MedicalRecord(String firstname, String lastname, String birthdate, String medications, String allergies) {
-        this.id = firstname+","+lastname;
+
+    public MedicalRecord(String firstname, String lastname, String birthdate, String medications, List<Allergies> allergies) {
+        this.id=firstname+","+lastname;
         this.firstname = firstname;
         this.lastname = lastname;
         this.birthdate = birthdate;
@@ -48,7 +53,7 @@ public class MedicalRecord {
         this.medications=medications;
         return this;
     }
-    public MedicalRecord allergies( String allergies) {
+    public MedicalRecord allergies(List<Allergies> allergies) {
         this.allergies=allergies;
         return this;
     }

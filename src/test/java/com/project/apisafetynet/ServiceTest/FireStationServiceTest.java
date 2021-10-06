@@ -7,6 +7,7 @@ import com.project.apisafetynet.Service.CalculateAgeService;
 import com.project.apisafetynet.Service.CalculateAgeServiceImpl;
 import com.project.apisafetynet.Service.FireStationServiceImp;
 import com.project.apisafetynet.model.*;
+import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
@@ -71,7 +72,8 @@ public class FireStationServiceTest {
         medicalRecord.setFirstname("Jack");
         medicalRecord.setLastname("Jekyll");
         medicalRecord.setMedications("medications");
-        medicalRecord.setAllergies("allergies");
+        List<Allergies> allergies = new ArrayList<>();
+        medicalRecord.setAllergies(allergies);
         medicalRecord.setBirthdate("03/12/1991");
         medicalRecordList.add(medicalRecord);
         lenient().when(fireStationRepository.findAll()).thenReturn(fireStationsArrayList);

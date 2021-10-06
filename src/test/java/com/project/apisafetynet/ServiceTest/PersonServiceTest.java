@@ -7,6 +7,7 @@ import com.project.apisafetynet.Service.CalculateAgeServiceImpl;
 import com.project.apisafetynet.Service.PersonServiceImpl;
 import com.project.apisafetynet.model.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.FamilyMembers;
+import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
 import com.project.apisafetynet.model.PersonInformation;
@@ -31,6 +32,7 @@ public class PersonServiceTest {
     private MedicalRecord medicalRecord;
     private List<Person> personArrayList = new ArrayList<>();
     private List<MedicalRecord> medicalRecordList = new ArrayList<>();
+
 
     @Mock
     private PersonRepository personRepository;
@@ -59,7 +61,8 @@ public class PersonServiceTest {
         medicalRecord.setFirstname("Jack");
         medicalRecord.setLastname("Jekyll");
         medicalRecord.setMedications("medications");
-        medicalRecord.setAllergies("allergies");
+        List<Allergies> allergies = new ArrayList<>();
+        medicalRecord.setAllergies(allergies);
         medicalRecord.setBirthdate("03/12/1991");
         medicalRecordList.add(medicalRecord);
         lenient().when(personRepository.findAll()).thenReturn(personArrayList);
