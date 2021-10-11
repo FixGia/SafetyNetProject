@@ -1,6 +1,10 @@
 package com.project.apisafetynet.model.DTO;
 
+import com.project.apisafetynet.model.ModelRepository.Allergies;
+import com.project.apisafetynet.model.ModelRepository.Medications;
 import lombok.Data;
+
+import java.util.List;
 
 
 @Data
@@ -11,8 +15,8 @@ public class PersonInformation {
     private String address;
     private int age;
     private String email;
-    private String medications;
-    private String allergies;
+    private List<Medications> medications;
+    private List<Allergies> allergies;
 
 
 

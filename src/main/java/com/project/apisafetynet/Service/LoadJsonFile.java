@@ -1,16 +1,18 @@
 package com.project.apisafetynet.Service;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-import com.project.apisafetynet.model.ModelRepository.FireStation;
-import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
-import com.project.apisafetynet.model.ModelRepository.Person;
+import com.project.apisafetynet.model.ModelRepository.*;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +21,21 @@ import java.util.List;
 @Log4j2
 public class LoadJsonFile {
 
-    private static String filePath = "src/main/resources/data.json";
+    private static String filePath = Thread.currentThread().getContextClassLoader().getResource("data.json").getFile();
     private static byte[] bytesFile;
     private static PersonService personService;
     private static FireStationServiceImp fireStationService;
     private static MedicalRecordServiceImpl medicalRecordService;
+    private final AllergiesService allergiesService;
+    private final MedicationService medicationService;
+    private MedicalRecord medicalRecord;
 
-    public LoadJsonFile(MedicalRecordServiceImpl medicalRecordService, PersonService personService, FireStationServiceImp fireStationService) {
+    public LoadJsonFile(MedicalRecordServiceImpl medicalRecordService, PersonService personService, FireStationServiceImp fireStationService, AllergiesService allergiesService, MedicationService medicationService) {
         LoadJsonFile.personService = personService;
         LoadJsonFile.fireStationService = fireStationService;
         LoadJsonFile.medicalRecordService = medicalRecordService;
+        this.allergiesService = allergiesService;
+        this.medicationService = medicationService;
     }
 
     public void readPersons() throws IOException {
@@ -75,11 +82,37 @@ public class LoadJsonFile {
         Any any = iter.readAny();
         Any medicalrecordsAny = any.get("medicalrecords");
         List<MedicalRecord> medicalRecords = new ArrayList<>();
-        medicalrecordsAny.forEach(a -> medicalRecords.add(new MedicalRecord().firstname(a.get("firstName").toString()).lastname(a.get("lastName").toString()).birthdate(a.get("birthdate").toString()).medications(a.get("medications").toString()).allergies(a.get("allergies").toString()).build()));
-        medicalRecords.forEach(m -> log.info(m.firstname.concat(m.lastname).concat(m.birthdate).concat(m.medications).concat(m.allergies)));
+        medicalrecordsAny.forEach(mr -> {
+        String allergiesAny = mr.get("allergies").toString().replaceAll("[\\[\\]\"]", "");
+        List<String> allergiesAnyList = List.of(allergiesAny.split(","));
+        List<Allergies> allergies = new ArrayList<>();
+        allergiesAnyList.forEach(a->{
+            if(!a.isEmpty()) allergies.add(new Allergies().nameAllergies(a));
+        });
+        allergiesService.saveAll(allergies);
+        String medicationsAny = mr.get("medications").toString().replaceAll("[\\[\\]\"]", "");
+        List<String> medicationsAnyList= List.of(medicationsAny.split(","));
+        List<Medications> medications = new ArrayList<>();
+        medicationsAnyList.forEach(a -> {
+            if(!a.isEmpty()) medications.add(new Medications().nameMedication(a));
+        });
+        medicationService.saveAll(medications);
+            medicalRecords.add(new MedicalRecord()
+                    .firstname(mr.get("firstName").toString())
+                    .lastname(mr.get("lastName").toString())
+                    .birthdate(mr.get("birthdate").toString())
+                    .medications(medications)
+                    .allergies(allergies)
+                    .build());
+
+        });
+        medicalRecords.forEach(m -> log.info(m.getFirstname().concat(m.getLastname()).concat(m.getBirthdate()).concat(String.valueOf(m.getMedications())).concat(String.valueOf(m.getAllergies()))));
         medicalRecordService.saveMedicalRecord(medicalRecords);
 
-    }
+            }
 
-}
+        }
+
+
+
 

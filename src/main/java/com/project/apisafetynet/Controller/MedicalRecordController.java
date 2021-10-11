@@ -1,9 +1,12 @@
 package com.project.apisafetynet.Controller;
 
 import com.project.apisafetynet.Service.MedicalRecordService;
+import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.Medications;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -70,11 +73,11 @@ public class MedicalRecordController {
             if (birthdate != null) {
                 currentMedicalRecord.setBirthdate(birthdate);
             }
-            String medications = medicalRecord.getMedications();
+            List<Medications> medications = medicalRecord.getMedications();
             if (medications != null) {
                 currentMedicalRecord.setMedications(medications);
             }
-            String allergies = medicalRecord.getAllergies();
+            List<Allergies> allergies = medicalRecord.getAllergies();
             if (allergies != null) {
                 currentMedicalRecord.setAllergies(allergies);
             }

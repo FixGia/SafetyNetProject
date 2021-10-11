@@ -2,8 +2,10 @@ package com.project.apisafetynet.ServiceTest;
 
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Service.MedicalRecordServiceImpl;
+import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 
+import com.project.apisafetynet.model.ModelRepository.Medications;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,8 +37,10 @@ public class MedicalRecordTest {
         medicalRecord.setId(1L);
         medicalRecord.setFirstname("Jack");
         medicalRecord.setLastname("Jekyll");
-        medicalRecord.setMedications("medications");
-        medicalRecord.setAllergies("allergies");
+        List<Medications> medications= new ArrayList<>();
+        medicalRecord.setMedications(medications);
+        List<Allergies> allergies = new ArrayList<>();
+        medicalRecord.setAllergies(allergies);
         medicalRecord.setBirthdate("03/12/1991");
         medicalRecordList.add(medicalRecord);
         lenient().when(medicalRecordRepository.findAll()).thenReturn(medicalRecordList);

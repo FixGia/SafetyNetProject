@@ -65,5 +65,6 @@ public class LoadJsonFileTest {
                 .email(a.get("email").toString())
                 .build()));
         personService.SavePersons(persons);
+
     }
 }
