@@ -16,15 +16,7 @@ public class AllergiesServiceImpl implements AllergiesService {
         this.allergiesRepository = allergiesRepository;
     }
 
-    @Override
-    public Optional<Allergies> findByName(String nameAllergies) {
-        return allergiesRepository.findAllergiesByNameAllergies(nameAllergies);
-    }
 
-    @Override
-    public Allergies create(Allergies allergies) {
-        return null;
-    }
 
     @Override
     public Iterable<Allergies> saveAll(Iterable<Allergies> allergiesList) {

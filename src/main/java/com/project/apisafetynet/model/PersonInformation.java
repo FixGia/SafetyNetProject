@@ -1,6 +1,7 @@
 package com.project.apisafetynet.model;
 
 import com.project.apisafetynet.model.ModelRepository.Allergies;
+import com.project.apisafetynet.model.ModelRepository.Medications;
 import lombok.Data;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class PersonInformation {
     private String address;
     private int age;
     private String email;
-    private String medications;
+    private List<Medications> medications;
     private List<Allergies> allergies;
 
     @Data

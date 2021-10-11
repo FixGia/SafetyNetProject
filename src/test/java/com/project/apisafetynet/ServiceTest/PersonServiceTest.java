@@ -9,6 +9,7 @@ import com.project.apisafetynet.model.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.FamilyMembers;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.Medications;
 import com.project.apisafetynet.model.ModelRepository.Person;
 import com.project.apisafetynet.model.PersonInformation;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +61,8 @@ public class PersonServiceTest {
         medicalRecord.setId("Jack,Jekyll");
         medicalRecord.setFirstname("Jack");
         medicalRecord.setLastname("Jekyll");
-        medicalRecord.setMedications("medications");
+        List<Medications> medications = new ArrayList<>();
+        medicalRecord.setMedications(medications);
         List<Allergies> allergies = new ArrayList<>();
         medicalRecord.setAllergies(allergies);
         medicalRecord.setBirthdate("03/12/1991");

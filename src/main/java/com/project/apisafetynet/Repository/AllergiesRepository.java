@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AllergiesRepository extends CrudRepository<Allergies, Long> {
+public interface AllergiesRepository extends CrudRepository<Allergies, String> {
 
     Optional<Allergies> findAllergiesByNameAllergies(String nameAllergies);
 }

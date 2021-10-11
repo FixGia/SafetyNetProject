@@ -1,6 +1,7 @@
 package com.project.apisafetynet.model;
 
 import com.project.apisafetynet.model.ModelRepository.Allergies;
+import com.project.apisafetynet.model.ModelRepository.Medications;
 import lombok.Data;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class FloodMembers {
     private String lastName;
     private String phone;
     private int age;
-    private String medications;
+    private List<Medications> medications;
     private List<Allergies> allergies ;
 
 

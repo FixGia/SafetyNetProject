@@ -1,12 +1,8 @@
 package com.project.apisafetynet.Service;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-import com.project.apisafetynet.model.ModelRepository.Allergies;
-import com.project.apisafetynet.model.ModelRepository.FireStation;
-import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
-import com.project.apisafetynet.model.ModelRepository.Person;
+import com.project.apisafetynet.model.ModelRepository.*;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -14,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @Service
@@ -26,12 +21,14 @@ public class LoadJsonFile {
     private static FireStationServiceImp fireStationService;
     private static MedicalRecordServiceImpl medicalRecordService;
     private final AllergiesService allergiesService;
+    private final MedicationsService medicationsService;
 
-    public LoadJsonFile(MedicalRecordServiceImpl medicalRecordService, PersonService personService, FireStationServiceImp fireStationService, AllergiesService allergiesService) {
+    public LoadJsonFile(MedicalRecordServiceImpl medicalRecordService, PersonService personService, FireStationServiceImp fireStationService, AllergiesService allergiesService, MedicationsService medicationsService) {
         LoadJsonFile.personService = personService;
         LoadJsonFile.fireStationService = fireStationService;
         LoadJsonFile.medicalRecordService = medicalRecordService;
         this.allergiesService = allergiesService;
+        this.medicationsService = medicationsService;
     }
 
     public void readPersons() throws IOException {
@@ -78,12 +75,36 @@ public class LoadJsonFile {
         Any any = iter.readAny();
         Any medicalrecordsAny = any.get("medicalrecords");
         List<MedicalRecord> medicalRecords = new ArrayList<>();
-            List<Allergies> allergies = new ArrayList<>();
+           /** List<Allergies> allergies = new ArrayList<>();
             medicalrecordsAny.forEach(a -> allergies.add(new Allergies().nameAllergies(a.get("allergies").toString())));
             allergiesService.saveAll(allergies);
+            **/
+        medicalrecordsAny.forEach(mr -> {
+        String allergiesAny = mr.get("allergies").toString().replaceAll("[\\[\\]\"]", "");
+        List<String> allergiesAnyList = List.of(allergiesAny.split(","));
+        List<Allergies> allergies = new ArrayList<>();
+        allergiesAnyList.forEach(a->{
+            if(!a.isEmpty()) allergies.add(new Allergies().nameAllergies(a));
+        });
+        allergiesService.saveAll(allergies);
+        String medicationsAny = mr.get("medications").toString().replaceAll("[\\[\\]\"]", "");
+        List<String> medicationsAnyList= List.of(medicationsAny.split(","));
+        List<Medications> medications = new ArrayList<>();
+        medicationsAnyList.forEach(a -> {
+            if(!a.isEmpty()) medications.add(new Medications().nameMedications(a));
+        });
+        medicationsService.saveAll(medications);
+            medicalRecords.add(new MedicalRecord()
+                    .firstname(mr.get("firstName").toString())
+                    .lastname(mr.get("lastName").toString())
+                    .birthdate(mr.get("birthdate").toString())
+                    .medications(medications)
+                    .allergies(allergies)
+                    .build());
+        });
 
-                medicalrecordsAny.forEach(a -> medicalRecords.add(new MedicalRecord().firstname(a.get("firstName").toString()).lastname(a.get("lastName").toString()).birthdate(a.get("birthdate").toString()).medications(a.get("medications").toString()).build()));
-                medicalRecordService.saveMedicalRecord(medicalRecords);
+        medicalRecordService.saveMedicalRecord(medicalRecords);
+
             }
 
         }

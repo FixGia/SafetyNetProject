@@ -16,15 +16,16 @@ public class MedicalRecord {
     private String firstname;
     private String lastname;
     private String birthdate;
-    private String medications;
 
-    @OneToMany
+    @ManyToMany
+    private List<Medications> medications;
+    @ManyToMany
     private List<Allergies> allergies;
 
 
 
 
-    public MedicalRecord(String firstname, String lastname, String birthdate, String medications, List<Allergies> allergies) {
+    public MedicalRecord(String firstname, String lastname, String birthdate, List<Medications> medications, List<Allergies> allergies) {
         this.id=firstname+","+lastname;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -49,7 +50,7 @@ public class MedicalRecord {
         this.birthdate= birthdate;
         return this;
     }
-    public MedicalRecord medications (String medications){
+    public MedicalRecord medications (List<Medications> medications){
         this.medications=medications;
         return this;
     }

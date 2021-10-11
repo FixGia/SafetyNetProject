@@ -3,6 +3,7 @@ package com.project.apisafetynet.Controller;
 import com.project.apisafetynet.Service.MedicalRecordService;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
+import com.project.apisafetynet.model.ModelRepository.Medications;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,7 +78,7 @@ public class MedicalRecordController {
             if (birthdate != null) {
                 currentMedicalRecord.setBirthdate(birthdate);
             }
-            String medications = medicalRecord.getMedications();
+            List<Medications> medications = medicalRecord.getMedications();
             if (medications != null) {
                 currentMedicalRecord.setMedications(medications);
             }
