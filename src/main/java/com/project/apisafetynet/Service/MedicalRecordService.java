@@ -11,10 +11,9 @@ public interface MedicalRecordService {
 
   Iterable<MedicalRecord> getMedicalRecords();
 
-  MedicalRecord deleteMedicalRecord(MedicalRecord medicalRecord);
+ void deleteMedicalRecord(MedicalRecord medicalRecord);
 
-
-  Optional<MedicalRecord> getMedicalRecord(String Id);
+  Optional<MedicalRecord> getMedicalRecord(String firstName, String lastName);
 
   MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord);
 

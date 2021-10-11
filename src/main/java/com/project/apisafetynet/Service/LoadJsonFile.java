@@ -5,6 +5,7 @@ import com.project.apisafetynet.model.ModelRepository.FireStation;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Data
 @Service
+@Log4j2
 public class LoadJsonFile {
 
     private static String filePath = "src/main/resources/data.json";
@@ -46,7 +48,7 @@ public class LoadJsonFile {
                 .build()));
         personService.SavePersons(persons);
 
-        persons.forEach(p -> System.out.println(p.firstName.concat(p.lastName).concat(p.address).concat(p.city).concat(p.phone).concat(p.zip)));
+        persons.forEach(p -> log.info(p.firstName.concat(p.lastName).concat(p.address).concat(p.city).concat(p.phone).concat(p.zip)));
 
 
 
@@ -62,7 +64,7 @@ public class LoadJsonFile {
         List<FireStation> firestations = new ArrayList<>();
         fireStationAny.forEach(a -> firestations.add(new FireStation().address(a.get("address").toString()).station(a.get("station").toString())
                 .build()));
-        firestations.forEach(f -> System.out.println(f.address.concat("  "+f.station)));
+        firestations.forEach(f -> log.info(f.address.concat("  "+f.station)));
         fireStationService.saveFireStations(firestations);
 
 
@@ -74,7 +76,7 @@ public class LoadJsonFile {
         Any medicalrecordsAny = any.get("medicalrecords");
         List<MedicalRecord> medicalRecords = new ArrayList<>();
         medicalrecordsAny.forEach(a -> medicalRecords.add(new MedicalRecord().firstname(a.get("firstName").toString()).lastname(a.get("lastName").toString()).birthdate(a.get("birthdate").toString()).medications(a.get("medications").toString()).allergies(a.get("allergies").toString()).build()));
-        medicalRecords.forEach(m -> System.out.print(m.firstname.concat(m.lastname).concat(m.birthdate).concat(m.medications).concat(m.allergies)));
+        medicalRecords.forEach(m -> log.info(m.firstname.concat(m.lastname).concat(m.birthdate).concat(m.medications).concat(m.allergies)));
         medicalRecordService.saveMedicalRecord(medicalRecords);
 
     }

@@ -10,7 +10,8 @@ import javax.persistence.*;
 public class MedicalRecord {
 
     @Id
-    public String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
     public String firstname;
     public String lastname;
     public String birthdate;
@@ -19,9 +20,9 @@ public class MedicalRecord {
 
 
 
-    public MedicalRecord(String firstname, String lastname, String birthdate, String medications, String allergies) {
-        this.id = firstname+","+lastname;
+    public MedicalRecord(String firstname, String lastname, String birthdate, String medications, String allergies, Long id) {
         this.firstname = firstname;
+        this.id = id;
         this.lastname = lastname;
         this.birthdate = birthdate;
         this.medications = medications;
@@ -54,6 +55,6 @@ public class MedicalRecord {
     }
 
     public MedicalRecord build () {
-        return new MedicalRecord(firstname,lastname,birthdate,medications,allergies);
+        return new MedicalRecord(firstname,lastname,birthdate,medications,allergies, id);
     }
 }

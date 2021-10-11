@@ -1,6 +1,8 @@
 package com.project.apisafetynet.ControllerTest;
 import com.project.apisafetynet.Controller.PersonController;
+import com.project.apisafetynet.Service.FireStationService;
 import com.project.apisafetynet.Service.LoadJsonFile;
+import com.project.apisafetynet.Service.MedicalRecordService;
 import com.project.apisafetynet.Service.PersonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +23,47 @@ public class PersonControllerTest {
     PersonService personService;
     @MockBean
     LoadJsonFile loadJsonFile;
+    @MockBean
+    FireStationService fireStationService;
+    @MockBean
+    MedicalRecordService medicalRecordService;
 
 
     @Test
     public void testGetPersons() throws Exception {
-        mockMvc.perform(get("/persons")).andExpect(status().isOk());
+        mockMvc.perform(get("/person").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
 
     }
     @Test
     public void testDeletePerson() throws Exception{
 
-        mockMvc.perform(delete("/persons/Id","{Id}")).andExpect(status().isOk());
+        mockMvc.perform(delete("/person").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
     }
     @Test
     public void testUpdatePerson() throws Exception{
-        mockMvc.perform(put("/persons/Id")).andExpect(status().isOk());
+        mockMvc.perform(put("/person").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
     }
     @Test
     public void testCreatePerson() throws  Exception {
-        mockMvc.perform(post("/persons/Id")).andExpect(status().isOk());
+        mockMvc.perform(post("/person").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
     }
     @Test
     public void testGetPerson() throws Exception{
-        mockMvc.perform(get("/persons/Id")).andExpect(status().isOk());
+        mockMvc.perform(get("/person").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
     }
+    @Test
+    public void testGetCommunityEmail() throws Exception{
+        mockMvc.perform(get("/person/communityEmail").param("city", "Culver")).andExpect(status().isOk());
     }
+
+    @Test
+    public void testGetPersonInformationList() throws Exception{
+        mockMvc.perform(get("/person/personInfo").param("firstName", "John").param("lastName", "Boyd")).andExpect(status().isOk());
+    }
+    @Test
+    public void testGetChildAlter() throws Exception{
+        mockMvc.perform(get("/person/childAlert").param("address", "1509 Culver St")).andExpect(status().isOk());
+    }
+
+}
 

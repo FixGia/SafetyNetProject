@@ -2,7 +2,7 @@ package com.project.apisafetynet.Service;
 import com.project.apisafetynet.Repository.FireStationRepository;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
-import com.project.apisafetynet.model.*;
+import com.project.apisafetynet.model.DTO.*;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
@@ -83,7 +83,7 @@ public class FireStationServiceImp implements FireStationService {
                     ArrayList<MedicalRecord> medicalRecordsList = medicalRecordRepository.findMedicalRecordByFirstnameAndLastname(personCoveredByStation.getFirstName(), personCoveredByStation.getLastName());
                     for (MedicalRecord medicalRecord : medicalRecordsList) {
                         String birthDate = medicalRecord.getBirthdate();
-                        PersonInformation.Age CalculateAge = new PersonInformation.Age(birthDate, "MM/dd/yyyy");
+                        Age CalculateAge = new Age(birthDate, "MM/dd/yyyy");
                         int age = calculateAgeService.CalculateAge(CalculateAge);
                         if (age < 18 ) {
                             child++;
@@ -135,7 +135,7 @@ public class FireStationServiceImp implements FireStationService {
         }
         for (Person person : personListByAddress) {
             Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
-            PersonInformation.Age CalculateAge = new PersonInformation.Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+            Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
             int age = calculateAgeService.CalculateAge(CalculateAge);
             Optional<FireStation> getFireStation = fireStationRepository.findFireStationByAddress(person.getAddress());
             PersonsAndFireStationWhoDeservedThem personsAndFireStationWhoDeservedThem = new PersonsAndFireStationWhoDeservedThem();
@@ -183,7 +183,7 @@ public class FireStationServiceImp implements FireStationService {
         for ( Person person : getPersonByAddress) {
             Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
             FloodMembers floodMembers = new FloodMembers();
-            PersonInformation.Age CalculateAge = new PersonInformation.Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
+            Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
             int age = calculateAgeService.CalculateAge(CalculateAge);
             floodMembers.setFirstName(person.getFirstName());
             floodMembers.setLastName(person.getLastName());

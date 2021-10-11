@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("medicalRecords")
+@RequestMapping("/medicalRecord")
 public class MedicalRecordController {
 
     final MedicalRecordService medicalRecordService;
@@ -16,37 +16,31 @@ public class MedicalRecordController {
         this.medicalRecordService = medicalRecordService;
     }
 
-    /**
-     * Get all MedicalRecords
-     * @return all MedicalRecords
-     */
-    @GetMapping
+    @GetMapping("/medicalRecords")
     public Iterable<MedicalRecord> getMedicalRecords() {
         return medicalRecordService.getMedicalRecords();
     }
-
     /**
      *
      * Get one MedicalRecord Object by firstname and lastname
-     * @param Id is firstname + lastname
+     * @param
      * @return a MedicalRecord Object
      */
-    @GetMapping("{Id}")
-    public Optional<MedicalRecord> getMedicalRecord(@PathVariable("Id")String Id){
-        return medicalRecordService.getMedicalRecord(Id);
+    @GetMapping()
+    public Optional<MedicalRecord> getMedicalRecord (@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
+        return medicalRecordService.getMedicalRecord(firstName,lastName);
     }
     /**
      * Create a medical Record
      * @param medicalRecord  a medicalRecord object
-     * @param Id is firstname + lastname
+     * @param
      * @return Create a medicalRecord
      */
-    @PostMapping("{Id}")
-    public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord, @PathVariable("Id") String Id) {
-        Optional<MedicalRecord> mR= medicalRecordService.getMedicalRecord(Id);
+    @PostMapping()
+    public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+        Optional<MedicalRecord> mR= medicalRecordService.getMedicalRecord(firstName,lastName);
         if (mR.isEmpty()) {
-            MedicalRecord currentMedicalRecord = medicalRecordService.saveMedicalRecord(medicalRecord);
-            return currentMedicalRecord;
+            return medicalRecordService.saveMedicalRecord(medicalRecord);
         } else {
             return null;
         }
@@ -54,12 +48,13 @@ public class MedicalRecordController {
     /**
      * Updated MedicalRecord Object
      * @param medicalRecord a medicalRecord object
-     * @param Id is firstname + lastname
+     * @param firstName  firstname of Person's MedicalRecord
+     * @param lastName lastname of Person's MedicalRecord
      * @return A medicalRecord Object updated
      */
-    @PutMapping("{Id}")
-    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord, @PathVariable("Id")String Id) {
-        Optional<MedicalRecord> mR = medicalRecordService.getMedicalRecord(Id);
+    @PutMapping()
+    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName")String firstName, @RequestParam("lastName") String lastName) {
+        Optional<MedicalRecord> mR = medicalRecordService.getMedicalRecord(firstName, lastName);
         if (mR.isPresent()) {
             MedicalRecord currentMedicalRecord = mR.get();
 
@@ -91,14 +86,15 @@ public class MedicalRecordController {
     }
     /**
      * Delete MedicalRecord by firstname + lastname
-     * @param Id is firstname + lastname
+     * @param
      * @param medicalRecord a medicalRecord object
      * @return Delete MedicalRecord
      */
-    @DeleteMapping("{Id}")
-    public MedicalRecord deleteMedicalRecord(@PathVariable("Id") String Id, MedicalRecord medicalRecord) {
-        medicalRecordService.getMedicalRecord(Id);
-      return medicalRecordService.deleteMedicalRecord(medicalRecord);
+    @DeleteMapping()
+    public MedicalRecord deleteMedicalRecord(@RequestParam("firstName") String firstName, @RequestParam("lastName")String lastName, MedicalRecord medicalRecord) {
+        medicalRecordService.getMedicalRecord(firstName, lastName);
+        medicalRecordService.deleteMedicalRecord(medicalRecord);
+        return medicalRecord;
     }
 
 }

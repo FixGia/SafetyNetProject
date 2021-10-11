@@ -1,9 +1,9 @@
 package com.project.apisafetynet.Service;
 
 
-import com.project.apisafetynet.model.ChildrenAndFamilyMembers;
+import com.project.apisafetynet.model.DTO.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.ModelRepository.Person;
-import com.project.apisafetynet.model.PersonInformation;
+import com.project.apisafetynet.model.DTO.PersonInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,9 @@ public interface PersonService {
 
     void deletePerson(Person person);
 
-    Person savePerson(Person person, String Id);
+    Optional<Person> savePerson(Person person);
 
-    Optional<Person> getPerson(String Id);
+    Optional<Person> getPerson(String firstName, String lastName);
 
     ArrayList<String> getEmailPersonByCity(String city);
 

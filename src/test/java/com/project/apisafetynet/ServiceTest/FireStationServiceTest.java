@@ -3,10 +3,9 @@ package com.project.apisafetynet.ServiceTest;
 import com.project.apisafetynet.Repository.FireStationRepository;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
-import com.project.apisafetynet.Service.CalculateAgeService;
 import com.project.apisafetynet.Service.CalculateAgeServiceImpl;
 import com.project.apisafetynet.Service.FireStationServiceImp;
-import com.project.apisafetynet.model.*;
+import com.project.apisafetynet.model.DTO.*;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
@@ -50,9 +49,9 @@ public class FireStationServiceTest {
 
 
     @BeforeEach
-    private void setUpBeforeAllTests() {
+    private void setUpBeforeEachTests() {
         person = new Person();
-        person.setId("Jack,Jekyll");
+        person.setId(1L);
         person.setFirstName("Jack");
         person.setLastName("Jekyll");
         person.setAddress("33 rue du test");
@@ -67,7 +66,7 @@ public class FireStationServiceTest {
         fireStation.setId(1L);
         fireStationsArrayList.add(fireStation);
         medicalRecord = new MedicalRecord();
-        medicalRecord.setId("Jack,Jekyll");
+        medicalRecord.setId(1L);
         medicalRecord.setFirstname("Jack");
         medicalRecord.setLastname("Jekyll");
         medicalRecord.setMedications("medications");

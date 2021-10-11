@@ -1,6 +1,7 @@
 package com.project.apisafetynet.Service;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
-import com.project.apisafetynet.model.PersonInformation;
+import com.project.apisafetynet.model.DTO.Age;
+import com.project.apisafetynet.model.DTO.PersonInformation;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public class CalculateAgeServiceImpl implements CalculateAgeService {
     }
 
 
-    public int CalculateAge(PersonInformation.Age age) {
+    public int CalculateAge(Age age) {
 
         String pattern = age.getPattern();
         String birthDate = age.getBirthdate();

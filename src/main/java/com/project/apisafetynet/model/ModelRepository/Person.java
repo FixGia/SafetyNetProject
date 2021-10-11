@@ -10,7 +10,8 @@ import javax.persistence.*;
 public class Person {
 
     @Id
-    public String Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long Id;
     @Column
     public String firstName;
     @Column
@@ -27,11 +28,9 @@ public class Person {
     public String email;
 
 
-
-
-    public Person(String firstName, String lastName, String address, String city, String zip, String phone, String email) {
-        this.Id = firstName+","+lastName;
+    public Person(String firstName, String lastName, String address, String city, String zip, String phone, String email, Long id) {
         this.firstName = firstName;
+        this.Id = id;
         this.lastName = lastName;
         this.address= address;
         this.city=city;
@@ -81,7 +80,7 @@ public class Person {
     }
 
     public Person build() {
-      return new Person(firstName,lastName,address,city,zip,phone,email);
+      return new Person(firstName,lastName,address,city,zip,phone,email,Id);
     }
 
 

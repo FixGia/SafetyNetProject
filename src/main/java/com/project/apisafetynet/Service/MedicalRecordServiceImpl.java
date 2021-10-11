@@ -29,14 +29,15 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    public MedicalRecord deleteMedicalRecord(MedicalRecord medicalRecord) {
-        return null;
+    public void deleteMedicalRecord(MedicalRecord medicalRecord) {
+        medicalRecordRepository.delete(medicalRecord);
     }
 
 
     @Override
-    public Optional<MedicalRecord> getMedicalRecord(String Id) {
-        return medicalRecordRepository.findById(Id);
+    public Optional<MedicalRecord> getMedicalRecord(String firstName, String lastName) {
+
+        return medicalRecordRepository.findAllByFirstnameAndLastname(firstName,lastName);
     }
 
     @Override

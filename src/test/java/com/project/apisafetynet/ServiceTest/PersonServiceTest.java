@@ -2,14 +2,13 @@ package com.project.apisafetynet.ServiceTest;
 
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
-import com.project.apisafetynet.Service.CalculateAgeService;
 import com.project.apisafetynet.Service.CalculateAgeServiceImpl;
 import com.project.apisafetynet.Service.PersonServiceImpl;
-import com.project.apisafetynet.model.ChildrenAndFamilyMembers;
-import com.project.apisafetynet.model.FamilyMembers;
+import com.project.apisafetynet.model.DTO.ChildrenAndFamilyMembers;
+import com.project.apisafetynet.model.DTO.FamilyMembers;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
-import com.project.apisafetynet.model.PersonInformation;
+import com.project.apisafetynet.model.DTO.PersonInformation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,9 +42,9 @@ public class PersonServiceTest {
 
 
     @BeforeEach
-    private void setUpBeforeAllTests() {
+    private void setUpBeforeEachTests() {
         person = new Person();
-        person.setId("Jack,Jekyll");
+        person.setId(1L);
         person.setFirstName("Jack");
         person.setLastName("Jekyll");
         person.setAddress("33 rue du test");
@@ -55,7 +54,7 @@ public class PersonServiceTest {
         person.email("Test@PersonTest.com");
         personArrayList.add(person);
         medicalRecord = new MedicalRecord();
-        medicalRecord.setId("Jack,Jekyll");
+        medicalRecord.setId(1L);
         medicalRecord.setFirstname("Jack");
         medicalRecord.setLastname("Jekyll");
         medicalRecord.setMedications("medications");
@@ -85,7 +84,7 @@ public class PersonServiceTest {
     }
     @Test
     public void savePersonTest() {
-        personService.savePerson(person, "Jack,Jekyll");
+        personService.savePerson(person);
         verify(personRepository,times(1)).save(person);
     }
 
@@ -97,9 +96,9 @@ public class PersonServiceTest {
     }
     @Test
     public void getPersonTest() {
-        personService.getPerson("Jack,Jekyll");
-        verify(personRepository,times(1)).findById("Jack,Jekyll");
-        assertEquals(personService.getPerson("Jack,Jekyll"), personRepository.findById("Jack,Jekyll"));
+        personService.getPerson("Jack", "Jekyll");
+        verify(personRepository,times(1)).findByFirstNameAndLastName("Jack","Jekyll");
+        assertEquals(personService.getPerson("Jack","Jekyll"), personRepository.findByFirstNameAndLastName("Jack", "Jekyll"));
     }
 
     @Test

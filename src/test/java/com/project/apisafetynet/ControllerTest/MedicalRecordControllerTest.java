@@ -24,24 +24,24 @@ public class MedicalRecordControllerTest {
     MedicalRecordService medicalRecordService;
 
     @Test
-    public void testGetMedicalRecords() throws Exception{
-        mockMvc.perform(get("/medicalRecords")).andExpect(status().isOk());
-    }
-    @Test
-    public void testCreateMedicalRecords() throws Exception{
-        mockMvc.perform(put("/medicalRecords/Id")).andExpect(status().isOk());
-    }
-    @Test
-    public void testDeleteMedicalRecords() throws Exception{
-        mockMvc.perform(delete("/medicalRecords/Id")).andExpect(status().isOk());
-    }
-    @Test
-    public void testUpdateMedicalRecords() throws Exception{
-        mockMvc.perform(post("/medicalRecords/Id")).andExpect(status().isOk());
-    }
-    @Test
     public void testGetMedicalRecord() throws Exception{
-        mockMvc.perform(get("/medicalRecords/Id")).andExpect(status().isOk());
+        mockMvc.perform(get("/medicalRecord").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
+    }
+    @Test
+    public void testCreateMedicalRecord() throws Exception{
+        mockMvc.perform(post("/medicalRecord").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
+    }
+    @Test
+    public void testDeleteMedicalRecord() throws Exception{
+        mockMvc.perform(delete("/medicalRecord").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
+    }
+    @Test
+    public void testUpdateMedicalRecord() throws Exception{
+        mockMvc.perform(put("/medicalRecord").param("firstName","John").param("lastName","Boyd")).andExpect(status().isOk());
+    }
+    @Test
+    public void testGetAllMedicalRecords() throws Exception{
+        mockMvc.perform(get("/medicalRecord/medicalRecords")).andExpect(status().isOk());
     }
 }
 

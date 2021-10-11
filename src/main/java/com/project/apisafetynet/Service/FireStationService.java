@@ -1,9 +1,9 @@
 package com.project.apisafetynet.Service;
 
-import com.project.apisafetynet.model.Flood;
-import com.project.apisafetynet.model.InfoByZone;
-import com.project.apisafetynet.model.PersonsAndFireStationWhoDeservedThem;
-import com.project.apisafetynet.model.PhoneAlert;
+import com.project.apisafetynet.model.DTO.Flood;
+import com.project.apisafetynet.model.DTO.InfoByZone;
+import com.project.apisafetynet.model.DTO.PersonsAndFireStationWhoDeservedThem;
+import com.project.apisafetynet.model.DTO.PhoneAlert;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
 
 import java.util.ArrayList;
