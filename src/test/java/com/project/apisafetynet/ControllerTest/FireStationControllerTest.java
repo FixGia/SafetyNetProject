@@ -4,12 +4,20 @@ import com.project.apisafetynet.Service.FireStationService;
 import com.project.apisafetynet.Service.LoadJsonFile;
 import com.project.apisafetynet.Service.MedicalRecordService;
 import com.project.apisafetynet.Service.PersonService;
+import com.project.apisafetynet.model.DTO.*;
+import com.project.apisafetynet.model.ModelRepository.FireStation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,38 +37,90 @@ public class FireStationControllerTest {
 
     @Test
     public void testGetFireStations() throws Exception {
-        mockMvc.perform(get("/firestation/firestations")).andExpect(status().isOk());
+        FireStation fireStation = new FireStation();
+
+        when(fireStationService.getFireStation((any(Long.class)))).thenReturn(Optional.of(fireStation));
+        mockMvc.perform(get("/firestations")).andExpect(status().isOk());
     }
     @Test
     public void testDeleteFireStation() throws Exception {
+        FireStation fireStation = new FireStation();
+        when(fireStationService.getFireStation(any(Long.class))).thenReturn(Optional.of(fireStation));
         mockMvc.perform(delete("/firestation").param ("Id", "1")).andExpect(status().isOk());
     }
     @Test
-    public void testGetFireStation() throws Exception {
-        mockMvc.perform(get("/firestation").param ("Id", "1")).andExpect(status().isOk());
+    public void testDeleteFireStationButItDoesntExist() throws Exception {
+        mockMvc.perform(delete("/firestation").param ("Id", "2")).andExpect(status().isNotFound());
     }
+
     @Test
     public void testUpdateFireStation() throws Exception{
+        FireStation fireStation = new FireStation();
+        when(fireStationService.updateFireStation(any(Long.class))).thenReturn(Optional.of(fireStation));
         mockMvc.perform(put("/firestation").param ("Id", "1")).andExpect(status().isOk());
     }
     @Test
+    public void testUpdateFireStationButItDoesntExist() throws Exception{
+        mockMvc.perform(put("/firestation").param ("Id", "2")).andExpect(status().isNotFound());
+    }
+    @Test
     public void testCreateFireStation() throws Exception{
-        mockMvc.perform(post("/firestation").param ("Id", "1")).andExpect(status().isOk());
+        mockMvc.perform(post("/firestation").param ("Id", "1")).andExpect(status().isCreated());
+    }
+    @Test
+    public void testCreateFireStationButItAlreadyExist() throws Exception{
+        FireStation fireStation = new FireStation();
+        when(fireStationService.getFireStation(any(Long.class))).thenReturn(Optional.of(fireStation));
+        mockMvc.perform(post("/firestation").param ("Id", "1")).andExpect(status().isBadRequest());
     }
     @Test
     public void testGetPersonInfoByFireStation() throws  Exception{
-        mockMvc.perform(get("/firestation/fireStation").param("station", "1")).andExpect(status().isOk());
+        InfoByZone infoByZone = new InfoByZone();
+        when(fireStationService.getListPersonInformationByFireStation(any(String.class))).thenReturn(Optional.of(infoByZone));
+        mockMvc.perform(get("/firestation").param("station", "1")).andExpect(status().isOk());
+    }
+    @Test
+    public void testGetPersonInfoByFireStationButItDoesntExist() throws  Exception{
+        mockMvc.perform(get("/firestation").param("station", "2")).andExpect(status().isNotFound());
     }
     @Test
     public void testGetPhoneNumber()throws Exception{
-        mockMvc.perform(get("/firestation/phoneNumber").param("station", "1")).andExpect(status().isOk());
+        PhoneAlert phoneAlert = new PhoneAlert();
+        phoneAlert.setPhone("0685156");
+        ArrayList<PhoneAlert> phoneAlerts = new ArrayList<>();
+        phoneAlerts.add(phoneAlert);
+
+        when(fireStationService.getPhoneNumberByStation(any(String.class))).thenReturn(phoneAlerts);
+        mockMvc.perform(get("/phoneNumber").param("station", "1")).andExpect(status().isOk());
+    }
+    @Test
+    public void testGetPhoneNumberButStationDoesntExist()throws Exception{
+        mockMvc.perform(get("/phoneNumber").param("station", "1")).andExpect(status().isNotFound());
     }
     @Test
     public void testGetListPersonDeservedByStation() throws Exception{
-        mockMvc.perform(get("/firestation/fire").param("address","1509 Culver St")).andExpect(status().isOk());
+        PersonsAndFireStationWhoDeservedThem personsAndFireStationWhoDeservedThem = new PersonsAndFireStationWhoDeservedThem();
+        ArrayList<PersonsAndFireStationWhoDeservedThem> personsAndFireStationWhoDeservedThems = new ArrayList<>();
+        personsAndFireStationWhoDeservedThems.add(personsAndFireStationWhoDeservedThem);
+        when(fireStationService.getPersonListAndStationNumber(any(String.class))).thenReturn(personsAndFireStationWhoDeservedThems);
+        mockMvc.perform(get("/fire").param("address","1509 Culver St")).andExpect(status().isOk());
+    }
+    @Test
+    public void testGetListPersonDeservedByStationButAddressDoesntExist() throws Exception{
+        mockMvc.perform(get("/fire").param("address","1509 Culver St")).andExpect(status().isNotFound());
     }
     @Test
     public void testGetFloodByStations() throws Exception{
-        mockMvc.perform(get("/firestation/flood/stations").param("stations", "1,2,3,4")).andExpect(status().isOk());
+        ArrayList<Flood> floodArrayList= new ArrayList<>();
+        List<FloodMembers> floodMembersList = new ArrayList<>();
+        Flood flood = new Flood("address", floodMembersList);
+        floodArrayList.add(flood);
+
+        when(fireStationService.getListOfFloodsByStations(any(ArrayList.class))).thenReturn(floodArrayList);
+        mockMvc.perform(get("/flood/stations").param("stations", "1,2,3,4")).andExpect(status().isOk());
+    }
+    @Test
+    public void testGetFloodByStationsButListStationsDoesntRight() throws Exception{
+        mockMvc.perform(get("/flood/stations").param("stations", "1,2,3,4")).andExpect(status().isNotFound());
     }
 }

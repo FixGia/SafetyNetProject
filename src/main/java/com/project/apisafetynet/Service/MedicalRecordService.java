@@ -9,12 +9,12 @@ public interface MedicalRecordService {
 
   void saveMedicalRecord(List<MedicalRecord> medicalRecordList);
 
-  Iterable<MedicalRecord> getMedicalRecords();
-
  void deleteMedicalRecord(MedicalRecord medicalRecord);
 
   Optional<MedicalRecord> getMedicalRecord(String firstName, String lastName);
 
-  MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord);
+  Optional<MedicalRecord> saveMedicalRecord(MedicalRecord medicalRecord);
+
+  Optional<MedicalRecord> updateMedicalRecord( MedicalRecord medicalRecord, String firstName, String lastName);
 
 }

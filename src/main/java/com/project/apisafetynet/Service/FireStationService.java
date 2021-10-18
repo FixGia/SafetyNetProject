@@ -14,13 +14,13 @@ public interface FireStationService{
 
     void saveFireStations(List<FireStation> FireStationList);
 
-    FireStation saveFireStation(FireStation fireStation);
+    Optional<FireStation> saveFireStation(FireStation fireStation);
 
     Iterable<FireStation> getFireStations();
 
     Optional<FireStation> getFireStation(long id);
 
-    void deleteFireStation(long id);
+    void deleteFireStation(Long id);
 
     Optional<InfoByZone> getListPersonInformationByFireStation(String station);
 
@@ -29,4 +29,6 @@ public interface FireStationService{
     ArrayList<PersonsAndFireStationWhoDeservedThem> getPersonListAndStationNumber(String address);
 
     ArrayList<Flood> getListOfFloodsByStations (ArrayList<String> stations);
+
+    Optional<FireStation> updateFireStation(Long id);
 }

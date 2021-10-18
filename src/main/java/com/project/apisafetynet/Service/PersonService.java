@@ -27,5 +27,7 @@ public interface PersonService {
 
     Optional<ChildrenAndFamilyMembers> getListOfChildrenAndFamilyMembersByAddress(String address);
 
+    Optional<Person> updatePerson(String firstName, String lastName, Person person);
+
     }
 

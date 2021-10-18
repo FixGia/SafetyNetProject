@@ -7,6 +7,7 @@ import com.project.apisafetynet.model.ModelRepository.FireStation;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @Data
+@Slf4j
 public class FireStationServiceImp implements FireStationService {
 
     final FireStationRepository fireStationRepository;
@@ -38,8 +40,18 @@ public class FireStationServiceImp implements FireStationService {
     }
 
     @Override
-    public FireStation saveFireStation(FireStation fireStation) {
-        return this.fireStationRepository.save(fireStation);
+    public Optional<FireStation> saveFireStation(FireStation fireStation) {
+        try {
+            Optional<FireStation> fireStationToCreate = fireStationRepository.findById(fireStation.getId());
+            if (fireStationToCreate.isPresent()){
+                return Optional.empty();
+            }
+            fireStationRepository.save(fireStation);
+        } catch (Exception e) {
+            log.debug("Error attempting to add a new FireStation in [FireStation/saveFireStation]");
+        }
+        return  Optional.of(fireStation);
+
     }
 
     @Override
@@ -53,7 +65,7 @@ public class FireStationServiceImp implements FireStationService {
     }
 
     @Override
-    public void deleteFireStation(long id) {
+    public void deleteFireStation(Long id) {
         this.fireStationRepository.deleteById(id);
     }
 
@@ -80,7 +92,7 @@ public class FireStationServiceImp implements FireStationService {
                     personCoveredByStation.setAddress(person.getAddress());
                     personCoveredByStation.setPhone(person.getPhone());
                     personListByStation.add(personCoveredByStation);
-                    ArrayList<MedicalRecord> medicalRecordsList = medicalRecordRepository.findMedicalRecordByFirstnameAndLastname(personCoveredByStation.getFirstName(), personCoveredByStation.getLastName());
+                    List<MedicalRecord> medicalRecordsList = medicalRecordRepository.findMedicalRecordByFirstNameAndLastName(personCoveredByStation.getFirstName(), personCoveredByStation.getLastName());
                     for (MedicalRecord medicalRecord : medicalRecordsList) {
                         String birthDate = medicalRecord.getBirthdate();
                         Age CalculateAge = new Age(birthDate, "MM/dd/yyyy");
@@ -134,7 +146,7 @@ public class FireStationServiceImp implements FireStationService {
             return personAndFireStationNumberWhoServedHimArrayList;
         }
         for (Person person : personListByAddress) {
-            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
+            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstNameAndLastName(person.getFirstName(), person.getLastName());
             Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
             int age = calculateAgeService.CalculateAge(CalculateAge);
             Optional<FireStation> getFireStation = fireStationRepository.findFireStationByAddress(person.getAddress());
@@ -172,6 +184,25 @@ public class FireStationServiceImp implements FireStationService {
         return floodArrayList;
     }
 
+    @Override
+    public Optional<FireStation> updateFireStation(Long id) {
+
+        Optional<FireStation> f = fireStationRepository.findById(id);
+        if (f.isPresent()) {
+            FireStation currentFireStation = f.get();
+
+            String address = currentFireStation.getAddress();
+            if (address != null) {
+                currentFireStation.setAddress(address);
+            }
+            String station = currentFireStation.getStation();
+            if (station != null) {
+                currentFireStation.setStation(station);
+            }
+            fireStationRepository.save(currentFireStation);
+        }
+        return f;
+    }
     /**
      *
      * @param getPersonByAddress
@@ -181,7 +212,7 @@ public class FireStationServiceImp implements FireStationService {
 
         ArrayList<FloodMembers> floodMembersArrayList= new ArrayList<>();
         for ( Person person : getPersonByAddress) {
-            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
+            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstNameAndLastName(person.getFirstName(), person.getLastName());
             FloodMembers floodMembers = new FloodMembers();
             Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
             int age = calculateAgeService.CalculateAge(CalculateAge);

@@ -4,6 +4,9 @@ import com.project.apisafetynet.Service.MedicalRecordService;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Medications;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,27 +14,37 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/medicalRecord")
+@Slf4j
 public class MedicalRecordController {
 
+    private static final String CLASSPATH = "com.project.ApiSafetyNet.MedicalRecordController";
     final MedicalRecordService medicalRecordService;
 
     public MedicalRecordController(MedicalRecordService medicalRecordService) {
         this.medicalRecordService = medicalRecordService;
     }
 
-    @GetMapping("/medicalRecords")
-    public Iterable<MedicalRecord> getMedicalRecords() {
-        return medicalRecordService.getMedicalRecords();
-    }
     /**
      *
-     * Get one MedicalRecord Object by firstname and lastname
+     * Get one MedicalRecord Object by firstName and lastName
      * @param
      * @return a MedicalRecord Object
      */
     @GetMapping()
-    public Optional<MedicalRecord> getMedicalRecord (@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
-        return medicalRecordService.getMedicalRecord(firstName,lastName);
+    public ResponseEntity<MedicalRecord> getMedicalRecord (@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
+        String functionPath = CLASSPATH + "getMedicalRecord";
+        log.info("Request received in"+ functionPath);
+
+        Optional<MedicalRecord> getMedicalRecord = medicalRecordService.getMedicalRecord(firstName,lastName);
+        if ( getMedicalRecord.isPresent()) {
+            log.info("Request is success");
+            MedicalRecord medicalRecord = getMedicalRecord.get();
+            return new ResponseEntity<>(medicalRecord, HttpStatus.OK);
+        }
+        else {
+            log.error("fail to get "+ firstName+" "+ lastName+ "'s MedicalRecord");
+            return  new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
     /**
      * Create a medical Record
@@ -40,64 +53,67 @@ public class MedicalRecordController {
      * @return Create a medicalRecord
      */
     @PostMapping()
-    public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+    public ResponseEntity<MedicalRecord> createMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+        String functionPath = CLASSPATH + "createMedicalRecord";
+        log.info("Request received in"+ functionPath);
         Optional<MedicalRecord> mR= medicalRecordService.getMedicalRecord(firstName,lastName);
         if (mR.isEmpty()) {
-            return medicalRecordService.saveMedicalRecord(medicalRecord);
+            log.info("Request is a success");
+            medicalRecordService.saveMedicalRecord(medicalRecord);
+            return new ResponseEntity<>(medicalRecord, HttpStatus.CREATED);
         } else {
-            return null;
+            log.error("Fail to save"+firstName+ lastName+" because is already exist");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+
     }
+
     /**
      * Updated MedicalRecord Object
      * @param medicalRecord a medicalRecord object
-     * @param firstName  firstname of Person's MedicalRecord
-     * @param lastName lastname of Person's MedicalRecord
+     * @param firstName  firstName of Person's MedicalRecord
+     * @param lastName lastName of Person's MedicalRecord
      * @return A medicalRecord Object updated
      */
     @PutMapping()
-    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName")String firstName, @RequestParam("lastName") String lastName) {
-        Optional<MedicalRecord> mR = medicalRecordService.getMedicalRecord(firstName, lastName);
-        if (mR.isPresent()) {
-            MedicalRecord currentMedicalRecord = mR.get();
+    public ResponseEntity<MedicalRecord> updateMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName")String firstName, @RequestParam("lastName") String lastName) {
 
-            String firstname = medicalRecord.getFirstname();
-            if( firstname != null) {
-                currentMedicalRecord.setFirstname(firstname);
-            }
-            String lastname = medicalRecord.getLastname();
-            if ( lastname != null) {
-                currentMedicalRecord.setLastname(lastname);
-            }
-            String birthdate = medicalRecord.getBirthdate();
-            if (birthdate != null) {
-                currentMedicalRecord.setBirthdate(birthdate);
-            }
-            List<Medications> medications = medicalRecord.getMedications();
-            if (medications != null) {
-                currentMedicalRecord.setMedications(medications);
-            }
-            List<Allergies> allergies = medicalRecord.getAllergies();
-            if (allergies != null) {
-                currentMedicalRecord.setAllergies(allergies);
-            }
-            medicalRecordService.saveMedicalRecord(currentMedicalRecord);
-            return currentMedicalRecord;
+        String functionPath = CLASSPATH + "updateMedicalRecord";
+        log.info("Request received in"+ functionPath);
+
+        Optional<MedicalRecord> mR = medicalRecordService.updateMedicalRecord(medicalRecord, firstName, lastName);
+        if (mR.isPresent()) {
+            MedicalRecord medicalRecordToUpdate= mR.get();
+            log.info("Request is a success"+mR+" is updated");
+            return new ResponseEntity<>(medicalRecordToUpdate, HttpStatus.OK);
         } else {
-            return null;
+            log.error(" Fail to update "+ firstName+" "+ lastName+"'s medicalRecord because it doesn't exist");
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
     /**
-     * Delete MedicalRecord by firstname + lastname
+     * Delete MedicalRecord by firstName + lastName
      * @param
      * @param medicalRecord a medicalRecord object
      * @return Delete MedicalRecord
      */
     @DeleteMapping()
-    public MedicalRecord deleteMedicalRecord(@RequestParam("firstName") String firstName, @RequestParam("lastName")String lastName, MedicalRecord medicalRecord) {
-        medicalRecordService.getMedicalRecord(firstName, lastName);
-        medicalRecordService.deleteMedicalRecord(medicalRecord);
-        return medicalRecord;
+    public ResponseEntity<MedicalRecord> deleteMedicalRecord(@RequestParam("firstName") String firstName, @RequestParam("lastName")String lastName, MedicalRecord medicalRecord) {
+        String functionPath = CLASSPATH + "deleteMedicalRecord";
+        log.info("Request received in" + functionPath);
+        Optional<MedicalRecord> mR = medicalRecordService.getMedicalRecord(firstName, lastName);
+
+        if (mR.isPresent()) {
+
+            log.info("Request is success " + firstName + " " + lastName + " is deleted");
+            MedicalRecord medicalRecordToDelete = mR.get();
+            medicalRecordService.deleteMedicalRecord(medicalRecordToDelete);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } else {
+            log.error("Fail to delete" + firstName + " " + lastName + " MedicalRecord because it doesn't exist in Db");
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }

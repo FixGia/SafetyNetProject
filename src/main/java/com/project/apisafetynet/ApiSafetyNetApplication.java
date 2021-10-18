@@ -11,7 +11,6 @@ public class ApiSafetyNetApplication implements CommandLineRunner {
 
     final LoadJsonFile loadJsonFile;
 
-
     public ApiSafetyNetApplication(LoadJsonFile loadJsonFile) {
         this.loadJsonFile = loadJsonFile;
 
@@ -20,7 +19,6 @@ public class ApiSafetyNetApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(ApiSafetyNetApplication.class, args);
     }
-
     @Override
     public void run(String... args) throws Exception {
 

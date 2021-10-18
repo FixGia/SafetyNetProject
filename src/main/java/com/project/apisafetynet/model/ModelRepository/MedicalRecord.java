@@ -13,8 +13,8 @@ public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String birthdate;
     @ManyToMany
     private List<Medications> medications;
@@ -24,9 +24,9 @@ public class MedicalRecord {
 
 
     public MedicalRecord(String firstname, String lastname, String birthdate, List<Medications> medications, List<Allergies> allergies, Long id) {
-        this.firstname = firstname;
+        this.firstName = firstname;
         this.id = id;
-        this.lastname = lastname;
+        this.lastName = lastname;
         this.birthdate = birthdate;
         this.medications = medications;
         this.allergies = allergies;
@@ -36,12 +36,12 @@ public class MedicalRecord {
     }
 
     public MedicalRecord firstname (String firstname) {
-        this.firstname = firstname;
+        this.firstName = firstname;
         return this;
     }
 
     public MedicalRecord lastname( String lastname) {
-        this.lastname = lastname;
+        this.lastName = lastname;
         return this;
     }
     public MedicalRecord birthdate (String birthdate) {
@@ -58,6 +58,6 @@ public class MedicalRecord {
     }
 
     public MedicalRecord build () {
-        return new MedicalRecord(firstname,lastname,birthdate,medications,allergies,id);
+        return new MedicalRecord(firstName, lastName,birthdate,medications,allergies,id);
     }
 }

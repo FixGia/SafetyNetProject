@@ -13,11 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -60,13 +58,13 @@ public class FireStationServiceTest {
         personArrayList.add(person);
         fireStation = new FireStation();
         fireStation.setStation("1");
-        fireStation.setAddress("1 Station address");
+        fireStation.setAddress("33 rue du test");
         fireStation.setId(1L);
         fireStationsArrayList.add(fireStation);
         medicalRecord = new MedicalRecord();
         medicalRecord.setId(1L);
-        medicalRecord.setFirstname("Jack");
-        medicalRecord.setLastname("Jekyll");
+        medicalRecord.setFirstName("Jack");
+        medicalRecord.setLastName("Jekyll");
         List<Medications>medications = new ArrayList<>();
         List<Allergies> allergies = new ArrayList<>();
         medicalRecord.setMedications(medications);
@@ -110,7 +108,7 @@ public class FireStationServiceTest {
 
     @Test
     public void deleteFireStationTest() {
-        fireStationService.deleteFireStation(1);
+        fireStationService.deleteFireStation(1L);
         verify(fireStationRepository, times(1)).deleteById(1L);
     }
 
@@ -119,7 +117,7 @@ public class FireStationServiceTest {
 
         when(fireStationRepository.findFireStationByStation(any(String.class))).thenReturn((ArrayList<FireStation>) fireStationsArrayList);
         when(personRepository.findPersonByAddress(any(String.class))).thenReturn((ArrayList<Person>) personArrayList);
-        when(medicalRecordRepository.findMedicalRecordByFirstnameAndLastname(any(String.class), any(String.class))).thenReturn((ArrayList<MedicalRecord>) medicalRecordList);
+        when(medicalRecordRepository.findMedicalRecordByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn((ArrayList<MedicalRecord>) medicalRecordList);
 
         Optional<InfoByZone> infoByZone = fireStationService.getListPersonInformationByFireStation(fireStation.getStation());
         assertNotNull(infoByZone);
@@ -148,40 +146,55 @@ public class FireStationServiceTest {
     public void getPersonListAndStationNumberTest() {
         when(personRepository.findPersonByAddress(any(String.class))).thenReturn((ArrayList<Person>) personArrayList);
         when(fireStationRepository.findFireStationByAddress(any(String.class))).thenReturn(Optional.of(fireStation));
-        when(medicalRecordRepository.findAllByFirstnameAndLastname(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
+        when(medicalRecordRepository.findAllByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
 
         ArrayList<PersonsAndFireStationWhoDeservedThem> personsAndFireStationWhoDeservedThem = fireStationService.getPersonListAndStationNumber(fireStation.getAddress());
 
         assertNotNull(personsAndFireStationWhoDeservedThem);
         assertEquals( "Jack", personsAndFireStationWhoDeservedThem.get(0).getFirstName());
-        assertEquals("allergies",personsAndFireStationWhoDeservedThem.get(0).getAllergies());
+        assertEquals(medicalRecord.getAllergies(),personsAndFireStationWhoDeservedThem.get(0).getAllergies());
         assertEquals("1",personsAndFireStationWhoDeservedThem.get(0).getFireStationNumber());
     }
 
     @Test
-    public void getListOfFloodsByStations() {
-        lenient().when(fireStationRepository.findFireStationByAddress(any(String.class))).thenReturn(Optional.of(fireStation));
-        lenient().when(personRepository.findPersonByAddress(any(String.class))).thenReturn((ArrayList<Person>) personArrayList);
+    public void getListOfFloodsByStationsTest() {
+      ArrayList<String> stations = new ArrayList<>();
+      stations.add(fireStation.getStation());
+      fireStationService.getListOfFloodsByStations(stations);
+      verify(fireStationRepository, times(1)).findFireStationByStation(fireStation.getStation());
+        if (!fireStationRepository.findFireStationByStation(fireStation.getStation()).isEmpty()) {
+            for (FireStation fireStation : fireStationRepository.findFireStationByStation(fireStation.getStation())) {
+                verify(personRepository, times(1)).findPersonByAddress(fireStation.getAddress());
+            }
 
-        ArrayList<String> stations = new ArrayList<>();
-        for (String station : stations) {
-            fireStationRepository.findFireStationByStation(station);
-            ArrayList<Flood> getListOfFloods = fireStationService.getListOfFloodsByStations(stations);
+        }
+    }
 
-            assertNotNull(getListOfFloods);
-            assertEquals( "Jack", getListOfFloods.get(0).getFloodMembersList().get(0).getFirstName());
-            assertEquals("Jekyll", getListOfFloods.get(0).getFloodMembersList().get(0).getLastName());
-            assertEquals(30,getListOfFloods.get(0).getFloodMembersList().get(0).getAge());
-            assertEquals( "1 Station address",getListOfFloods.get(0).getAddress());
+
+    @Test
+    public void buildFloodMemberListTest() {
+        when(medicalRecordRepository.findAllByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
+        ArrayList<FloodMembers> floodMembersArrayList= fireStationService.buildFloodMemberList((ArrayList<Person>) personArrayList);
+        assertNotNull(floodMembersArrayList);
+        assertEquals("Jack", floodMembersArrayList.get(0).getFirstName());
+    }
+
+    @Test
+    public void updateFireStationTest() {
+        fireStationService.updateFireStation(fireStation.getId());
+        verify(fireStationRepository, times(1)).findById(fireStation.getId());
+        if (fireStationRepository.findById(fireStation.getId()).isPresent()){
+            verify(fireStationRepository, times(1)).save(fireStation);
         }
     }
     @Test
-    public void buildFloodMemberList() {
-        when(medicalRecordRepository.findAllByFirstnameAndLastname(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
-        ArrayList<FloodMembers> floodMembersArrayList= fireStationService.buildFloodMemberList((ArrayList<Person>) personArrayList);
-        assertNotNull(floodMembersArrayList);
+    public void updateFireStationButDoesntExistTest() {
 
-        assertEquals("Jack", floodMembersArrayList.get(0).getFirstName());
+        fireStationService.updateFireStation(450L);
 
+        verify(fireStationRepository, times(1)).findById(450L);
+
+        verify(fireStationRepository,times(0)).save(fireStation);
+        }
     }
-}
+

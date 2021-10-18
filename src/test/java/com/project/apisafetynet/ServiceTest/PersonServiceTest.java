@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
 
-    private Person person ;
+    private Person person;
     private MedicalRecord medicalRecord;
     private List<Person> personArrayList = new ArrayList<>();
     private List<MedicalRecord> medicalRecordList = new ArrayList<>();
@@ -57,9 +57,9 @@ public class PersonServiceTest {
         personArrayList.add(person);
         medicalRecord = new MedicalRecord();
         medicalRecord.setId(1L);
-        medicalRecord.setFirstname("Jack");
-        medicalRecord.setLastname("Jekyll");
-        List<Medications>medications = new ArrayList<>();
+        medicalRecord.setFirstName("Jack");
+        medicalRecord.setLastName("Jekyll");
+        List<Medications> medications = new ArrayList<>();
         List<Allergies> allergies = new ArrayList<>();
         medicalRecord.setMedications(medications);
         medicalRecord.setAllergies(allergies);
@@ -72,11 +72,13 @@ public class PersonServiceTest {
 
 
     }
+
     @Test
     public void savePersonsTest() {
-       personService.SavePersons(personArrayList);
-       verify(personRepository,times(1)).saveAll(personArrayList);
+        personService.SavePersons(personArrayList);
+        verify(personRepository, times(1)).saveAll(personArrayList);
     }
+
     @Test
     public void getPersonsTest() {
         ArrayList<Person> personArrayList = new ArrayList<>();
@@ -86,23 +88,25 @@ public class PersonServiceTest {
         assertNotNull(personResponse);
         assertEquals(personArrayList, personResponse);
     }
+
     @Test
     public void savePersonTest() {
         personService.savePerson(person);
-        verify(personRepository,times(1)).save(person);
+        verify(personRepository, times(1)).save(person);
     }
 
     @Test
     public void deletePersonTest() {
         personService.deletePerson(person);
-        verify(personRepository,times(1)).delete(person);
+        verify(personRepository, times(1)).delete(person);
 
     }
+
     @Test
     public void getPersonTest() {
         personService.getPerson("Jack", "Jekyll");
-        verify(personRepository,times(1)).findByFirstNameAndLastName("Jack","Jekyll");
-        assertEquals(personService.getPerson("Jack","Jekyll"), personRepository.findByFirstNameAndLastName("Jack", "Jekyll"));
+        verify(personRepository, times(1)).findByFirstNameAndLastName("Jack", "Jekyll");
+        assertEquals(personService.getPerson("Jack", "Jekyll"), personRepository.findByFirstNameAndLastName("Jack", "Jekyll"));
     }
 
     @Test
@@ -119,9 +123,9 @@ public class PersonServiceTest {
     @Test
     public void getPersonInformationTest() {
         String firstName = "Jack";
-        String lastName= "Jekyll";
+        String lastName = "Jekyll";
         when(personRepository.findPersonByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn((ArrayList<Person>) personArrayList);
-        when(medicalRecordRepository.findAllByFirstnameAndLastname(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
+        when(medicalRecordRepository.findAllByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
         ArrayList<PersonInformation> getPersonInformationResponse = personService.getPersonInformation(firstName, lastName);
         PersonInformation personInformation = new PersonInformation();
         personInformation.setFirstName(person.getFirstName());
@@ -132,14 +136,15 @@ public class PersonServiceTest {
         personInformation.setMedications(medicalRecord.getMedications());
         personInformation.setAge(30);
         getPersonInformationResponse.add(personInformation);
-        assertEquals(personInformation.getFirstName(),"Jack");
+        assertEquals(personInformation.getFirstName(), "Jack");
         assertEquals(personInformation.getLastName(), "Jekyll");
         assertEquals(personInformation.getAddress(), "33 rue du test");
-        assertEquals(personInformation.getEmail(),"Test@PersonTest.com");
-        assertEquals(personInformation.getAllergies(), "allergies");
-        assertEquals(personInformation.getMedications(),"medications");
+        assertEquals(personInformation.getEmail(), "Test@PersonTest.com");
+        assertEquals(personInformation.getAllergies(), medicalRecord.getAllergies());
+        assertEquals(personInformation.getMedications(), medicalRecord.getMedications());
         assertEquals(personInformation.getAge(), 30);
     }
+
     @Test
     public void getPersonInformationAndReturnAndEmptyObjectBecausePersonDontExist() {
         String firstName = "John";
@@ -148,9 +153,10 @@ public class PersonServiceTest {
         assertNotNull(getPersonInformation);
         assertTrue(getPersonInformation.isEmpty());
     }
+
     @Test
     public void GetListOfChildrenAndFamilyMembersByAddressTest() {
-        when(medicalRecordRepository.findAllByFirstnameAndLastname(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
+        when(medicalRecordRepository.findAllByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
         when(personRepository.findPersonByAddress(any(String.class))).thenReturn((ArrayList<Person>) personArrayList);
         Optional<ChildrenAndFamilyMembers> childrenAndFamilyMembersResponse = personService.getListOfChildrenAndFamilyMembersByAddress("addressTestListOfChildrenMethod");
         ArrayList<FamilyMembers> familyMembersList = new ArrayList<>();
@@ -165,10 +171,64 @@ public class PersonServiceTest {
 
     @Test
     public void BuildChildrenAndFamilyMembersTest() {
-        when(medicalRecordRepository.findAllByFirstnameAndLastname(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
+        when(medicalRecordRepository.findAllByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
         ChildrenAndFamilyMembers buildChildrenAndOtherMembersResponse = personService.buildChildrenAndFamilyMembers((ArrayList<Person>) personArrayList);
         assertNotNull(buildChildrenAndOtherMembersResponse);
         assertEquals("Jack", buildChildrenAndOtherMembersResponse.getChildrenArrayList().get(0).getFirstName());
         assertEquals("Jekyll", buildChildrenAndOtherMembersResponse.getChildrenArrayList().get(0).getLastName());
+    }
+
+    @Test
+    public void UpdatePersonTest() {
+
+        personService.updatePerson(person.getFirstName(), person.getLastName(), person);
+        verify(personRepository, times(1)).findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+        if (personRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName()).isPresent()) {
+            Person currentPerson = personRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName()).get();
+            String firstname = person.getFirstName();
+            if (firstname != null) {
+                currentPerson.setFirstName(firstname);
+            }
+            String lastname = person.getLastName();
+            if (firstname != null) {
+                currentPerson.setLastName(lastname);
+            }
+            String email = person.getEmail();
+            if (email != null) {
+                currentPerson.setEmail(email);
+            }
+            String address = person.getAddress();
+            if (address != null) {
+                currentPerson.setAddress(address);
+            }
+            String city = person.getCity();
+            if (city != null) {
+                currentPerson.setCity(city);
+            }
+            String zip = person.getZip();
+            if (zip != null) {
+                currentPerson.setZip(zip);
+            }
+            String phone = person.getPhone();
+            if (phone != null) {
+                currentPerson.setPhone(phone);
+            }
+            verify(personRepository, times(1)).save(person);
+
+            assertEquals(person.getFirstName(), currentPerson.getFirstName());
+            assertEquals(person.getLastName(), currentPerson.getLastName());
+            assertEquals(person.getAddress(), currentPerson.getAddress());
+            assertEquals(person.getEmail(), currentPerson.getEmail());
+            assertEquals(person.getCity(), currentPerson.getCity());
+            assertEquals(person.getPhone(), currentPerson.getPhone());
+            assertEquals(person.getZip(), currentPerson.getZip());
+
+        }
+    }
+    @Test
+    public void UpdatePersonButDoesntExist() {
+        personService.updatePerson("David", "Finch", person);
+        verify(personRepository, times(0)).findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+        verify(personRepository, times(0)).save(person);
     }
 }

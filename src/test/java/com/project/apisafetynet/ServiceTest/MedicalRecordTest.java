@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
@@ -35,8 +36,8 @@ public class MedicalRecordTest {
     private void setUpBeforeEachTests() {
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setId(1L);
-        medicalRecord.setFirstname("Jack");
-        medicalRecord.setLastname("Jekyll");
+        medicalRecord.setFirstName("Jack");
+        medicalRecord.setLastName("Jekyll");
         List<Medications> medications= new ArrayList<>();
         medicalRecord.setMedications(medications);
         List<Allergies> allergies = new ArrayList<>();
@@ -47,7 +48,6 @@ public class MedicalRecordTest {
         lenient().when(medicalRecordRepository.save(medicalRecord)).thenReturn(medicalRecord);
     }
 
-
     @Test
     public void saveAllMedicalRecordsTest() {
         medicalRecordService.saveMedicalRecord(medicalRecordList);
@@ -56,8 +56,8 @@ public class MedicalRecordTest {
     @Test
     public void getMedicalRecordTest() {
         medicalRecordService.getMedicalRecord("Jack", "Jekyll");
-        verify(medicalRecordRepository, times(1)).findAllByFirstnameAndLastname("Jack", "Jekyll");
-        assertEquals(medicalRecordService.getMedicalRecord("Jack", "Jekyll"), medicalRecordRepository.findAllByFirstnameAndLastname("Jack", "Jekyll"));
+        verify(medicalRecordRepository, times(1)).findAllByFirstNameAndLastName("Jack", "Jekyll");
+        assertEquals(medicalRecordService.getMedicalRecord("Jack", "Jekyll"), medicalRecordRepository.findAllByFirstNameAndLastName("Jack", "Jekyll"));
 
     }
     @Test
@@ -65,10 +65,14 @@ public class MedicalRecordTest {
         medicalRecordService.deleteMedicalRecord(medicalRecord);
         verify(medicalRecordRepository, times(1)).delete(medicalRecord);
     }
+
     @Test
-    public void saveMedicalRecordTest() {
+    public void createMedicalRecordTest(){
+        MedicalRecord medicalRecord= new MedicalRecord();
         medicalRecordService.saveMedicalRecord(medicalRecord);
         verify(medicalRecordRepository, times(1)).save(medicalRecord);
+
+
 
     }
 }

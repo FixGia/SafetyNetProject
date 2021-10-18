@@ -1,7 +1,5 @@
 package com.project.apisafetynet.Service;
-import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.model.DTO.Age;
-import com.project.apisafetynet.model.DTO.PersonInformation;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,12 +10,6 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class CalculateAgeServiceImpl implements CalculateAgeService {
 
-    final
-    MedicalRecordRepository medicalRecordRepository;
-
-    public CalculateAgeServiceImpl(MedicalRecordRepository medicalRecordRepository) {
-        this.medicalRecordRepository = medicalRecordRepository;
-    }
 
 
     public int CalculateAge(Age age) {

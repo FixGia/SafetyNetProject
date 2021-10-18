@@ -8,11 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +35,6 @@ public class LoadJsonFile {
     }
 
     public void readPersons() throws IOException {
-
         bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
         Any any = iter.readAny();
@@ -54,7 +49,6 @@ public class LoadJsonFile {
                 .email(a.get("email").toString())
                 .build()));
         personService.SavePersons(persons);
-
         persons.forEach(p -> log.info(p.firstName.concat(p.lastName).concat(p.address).concat(p.city).concat(p.phone).concat(p.zip)));
 
 
@@ -63,7 +57,6 @@ public class LoadJsonFile {
 
 
     public void readFireStation() throws IOException {
-
         bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
         Any any = iter.readAny();
@@ -77,6 +70,7 @@ public class LoadJsonFile {
 
     }
     public void readMedicalRecords() throws IOException {
+
         bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
         Any any = iter.readAny();
@@ -106,7 +100,7 @@ public class LoadJsonFile {
                     .build());
 
         });
-        medicalRecords.forEach(m -> log.info(m.getFirstname().concat(m.getLastname()).concat(m.getBirthdate()).concat(String.valueOf(m.getMedications())).concat(String.valueOf(m.getAllergies()))));
+        medicalRecords.forEach(m -> log.info(m.getFirstName().concat(m.getLastName()).concat(m.getBirthdate()).concat(String.valueOf(m.getMedications())).concat(String.valueOf(m.getAllergies()))));
         medicalRecordService.saveMedicalRecord(medicalRecords);
 
             }

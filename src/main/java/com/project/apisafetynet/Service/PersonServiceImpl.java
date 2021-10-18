@@ -7,6 +7,7 @@ import com.project.apisafetynet.model.DTO.*;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @Data
+@Slf4j
 public class PersonServiceImpl implements PersonService {
 
     final PersonRepository personRepository;
@@ -55,7 +57,7 @@ public class PersonServiceImpl implements PersonService {
             }
             personRepository.save(person);
         } catch (Exception e) {
-            System.out.println("Error attempting to add a new person in [PersonServiceImpl/addNewPerson] method");
+            log.debug("Error attempting to add a new person in [PersonServiceImpl/savePerson] method");
         }
         return Optional.of(person);
     }
@@ -89,7 +91,7 @@ public class PersonServiceImpl implements PersonService {
             return personInformationList;
         }
         for(Person person : personWithSpecificName) {
-            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
+            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstNameAndLastName(person.getFirstName(), person.getLastName());
             Age CalculateAge = new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
             int age = calculateAgeService.CalculateAge(CalculateAge);
             PersonInformation personInformation = new PersonInformation();
@@ -118,11 +120,51 @@ public class PersonServiceImpl implements PersonService {
         return Optional.of(childrenAndFamilyMembers);
     }
 
+    @Override
+    public Optional<Person> updatePerson(String firstName, String lastName, Person person) {
+
+        Optional<Person> p = personRepository.findByFirstNameAndLastName(firstName, lastName);
+        if (p.isPresent()) {
+            Person currentPerson = p.get();
+
+            String firstname = person.getFirstName();
+            if (firstname != null) {
+                currentPerson.setFirstName(firstname);
+            }
+            String lastname = person.getLastName();
+            if (firstname != null) {
+                currentPerson.setLastName(lastname);
+            }
+            String email = person.getEmail();
+            if (email != null) {
+                currentPerson.setEmail(email);
+            }
+            String address = person.getAddress();
+            if (address != null) {
+                currentPerson.setAddress(address);
+            }
+            String city = person.getCity();
+            if (city != null) {
+                currentPerson.setCity(city);
+            }
+            String zip = person.getZip();
+            if (zip != null) {
+                currentPerson.setZip(zip);
+            }
+            String phone = person.getPhone();
+            if (phone != null) {
+                currentPerson.setPhone(phone);
+            }
+            personRepository.save(currentPerson);
+        }
+        return p;
+    }
+
     public ChildrenAndFamilyMembers buildChildrenAndFamilyMembers(@NotNull ArrayList<Person> personAtThisAddress) {
         ArrayList<Child> childrenArrayList = new ArrayList<>();
         ArrayList<FamilyMembers> familyMembersList = new ArrayList<>();
         for (Person person : personAtThisAddress) {
-            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstnameAndLastname(person.getFirstName(), person.getLastName());
+            Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findAllByFirstNameAndLastName(person.getFirstName(), person.getLastName());
             int age = -1;
             if (medicalRecord.isPresent()) {
                 Age CalculateAge= new Age(medicalRecord.get().getBirthdate(), "MM/dd/yyyy");
