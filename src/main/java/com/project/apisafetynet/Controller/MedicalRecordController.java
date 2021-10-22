@@ -76,14 +76,15 @@ public class MedicalRecordController {
      * @return A medicalRecord Object updated
      */
     @PutMapping()
-    public ResponseEntity<MedicalRecord> updateMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName")String firstName, @RequestParam("lastName") String lastName) {
+    public ResponseEntity<MedicalRecord> updateMedicalRecord(@RequestParam("firstName")String firstName,@RequestParam("lastName") String lastName,@RequestBody MedicalRecord medicalRecord ) {
 
         String functionPath = CLASSPATH + "updateMedicalRecord";
         log.info("Request received in"+ functionPath);
 
-        Optional<MedicalRecord> mR = medicalRecordService.updateMedicalRecord(medicalRecord, firstName, lastName);
-        if (mR.isPresent()) {
-            MedicalRecord medicalRecordToUpdate= mR.get();
+
+        MedicalRecord mR = medicalRecordService.updateMedicalRecord(medicalRecord, firstName, lastName);
+        if ( mR!= null) {
+            MedicalRecord medicalRecordToUpdate= mR;
             log.info("Request is a success"+mR+" is updated");
             return new ResponseEntity<>(medicalRecordToUpdate, HttpStatus.OK);
         } else {

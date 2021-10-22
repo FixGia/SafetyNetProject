@@ -15,6 +15,6 @@ public interface MedicalRecordService {
 
   Optional<MedicalRecord> saveMedicalRecord(MedicalRecord medicalRecord);
 
-  Optional<MedicalRecord> updateMedicalRecord( MedicalRecord medicalRecord, String firstName, String lastName);
+  MedicalRecord updateMedicalRecord( MedicalRecord medicalRecord, String firstName, String lastName);
 
 }

@@ -48,17 +48,16 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             medicalRecordRepository.save(medicalRecord);
 
         } catch (Exception e) {
-            log.debug("Error attempting to add a new MedicalRecord in [MedicalRecord/SaveMedicalRecord");
+            log.debug("Error attempting to add a new MedicalRecord in [MedicalRecord/saveMedicalRecord");
         }
         return Optional.of(medicalRecord);
     }
 
     @Override
-    //FIXME Cant Update Medication And Allergies because they are in a array !!!
-    public Optional<MedicalRecord> updateMedicalRecord(MedicalRecord medicalRecord, String firstName, String lastName) {
-        Optional<MedicalRecord> mR = medicalRecordRepository.findAllByFirstNameAndLastName(firstName, lastName);
-        if (mR.isPresent()) {
-            MedicalRecord currentMedicalRecord = mR.get();
+    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord, String firstName, String lastName) {
+        List<MedicalRecord> mR = medicalRecordRepository.findMedicalRecordByFirstNameAndLastName(firstName, lastName);
+        if (mR != null) {
+            MedicalRecord currentMedicalRecord = mR.get(0);
 
             String firstname = medicalRecord.getFirstName();
             if (firstname != null) {
@@ -74,20 +73,18 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             }
             List<Medications> medications = medicalRecord.getMedications();
             if (medications != null) {
-                for (Medications medicationsToChange : medications){
-                    medicationsToChange.setNameMedication(medications.get(0).getNameMedication());
-
+                currentMedicalRecord.setMedications(medications);
                 }
 
-                currentMedicalRecord.setMedications(medications);
-            }
             List<Allergies> allergies = medicalRecord.getAllergies();
             if (allergies != null) {
                 currentMedicalRecord.setAllergies(allergies);
             }
-            medicalRecordRepository.save(medicalRecord);
+            medicalRecordRepository.save(currentMedicalRecord);
+            return currentMedicalRecord;
         }
-        return mR;
+        log.debug("Error attempting to update a MedicalRecord in [MedicalRecord/updateMedicalRecord");
+        return null;
     }
 }
 

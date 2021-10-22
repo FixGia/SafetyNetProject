@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -76,13 +77,15 @@ public class MedicalRecordControllerTest {
         medicalRecord.setMedications(List.of(new Medications()));
         medicalRecord.setAllergies(List.of(new Allergies()));
 
-        when(medicalRecordService.updateMedicalRecord(any(MedicalRecord.class),any(String.class), any(String.class))).thenReturn(Optional.of(medicalRecord));
-        mockMvc.perform(put("/medicalRecord").param("firstName","firstNameTest").param("lastName","lastNameTest")).andExpect(status().isOk());
+        when(medicalRecordService.updateMedicalRecord(any(MedicalRecord.class),any(String.class), any(String.class))).thenReturn(medicalRecord);
+        mockMvc.perform(put("/medicalRecord?firstName=firstNameTest&lastName=lastNameTest")
+                .contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(status().isOk());
 
     }
     @Test
     public void testUpdateMedicalRecordButItDoesntExist() throws Exception{
-        mockMvc.perform(put("/medicalRecord").param("firstName","firstNameTest").param("lastName","lastNameTest")).andExpect(status().isNotFound());
+        mockMvc.perform(put("/medicalRecord").param("firstName","firstNameTest").param("lastName","lastNameTest").contentType(MediaType.APPLICATION_JSON).content("{}")).andExpect(status().isNotFound());
 
     }
 
