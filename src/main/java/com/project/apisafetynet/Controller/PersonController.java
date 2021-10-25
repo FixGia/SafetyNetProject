@@ -86,7 +86,6 @@ public class PersonController {
             log.info(" Request is a success" + p + " is updated");
             return new ResponseEntity<>(personToUpdate, HttpStatus.OK);
         } else {
-
             log.error("Fail to update Person because "+ firstName+" "+ lastName+ " doesn't exist in DB");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.MultiValueMap;
 
 
 @SpringBootTest
@@ -58,7 +59,11 @@ public class PersonControllerIT {
     @Test
     void UpdatePersonTest() throws Exception {
         mockMvc.perform(put("/person")
-                        .param("firstName", "John").param("lastName", "Boyd").param("address", "addressModify").param("email", "emailModify"))
+                        .param("firstName", "John").param("lastName", "Boyd")
+                        .param("address", "addressModify")
+                        .param("email", "emailModify")
+                        .param("zip", "0000")
+                        .param("phone", "0000000"))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/person")
                         .param("firstName", "John")
@@ -67,18 +72,28 @@ public class PersonControllerIT {
                 .andExpect(jsonPath("$.lastName", is("Boyd")))
                 .andExpect(jsonPath("$.address", is("addressModify")))
                 .andExpect(jsonPath("$.email", is("emailModify")))
+                .andExpect(jsonPath("$.zip", is("0000")))
+                .andExpect(jsonPath("$.phone", is("0000000")))
                 .andExpect(status().isOk());
+    }
+    @Test
+    void UpdatePersonButDoesntExist() throws Exception {
+        mockMvc.perform(put("/person")
+                        .param("firstName", "firstNameTest").param("lastName", "lastNameTest")
+                        .param("address", "addressModify")
+                        .param("email", "emailModify")
+                        .param("zip", "0000")
+                        .param("phone", "0000000"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     @Order(4)
     void CreatePersonTest() throws Exception {
-
         mockMvc.perform(post("/person")
                 .param("firstName", "firstNameTest")
                 .param("lastName", "lastNameTest"))
                 .andExpect(status().isCreated());
-
         mockMvc.perform(get("/person").param("firstName", "firstNameTest").param("lastName", "lastNameTest")).andExpect(status().isOk());
     }
 

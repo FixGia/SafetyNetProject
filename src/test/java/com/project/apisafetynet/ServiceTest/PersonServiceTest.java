@@ -180,51 +180,16 @@ public class PersonServiceTest {
 
     @Test
     public void UpdatePersonTest() {
-
-        personService.updatePerson(person.getFirstName(), person.getLastName(), person);
-        verify(personRepository, times(1)).findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-        if (personRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName()).isPresent()) {
-            Person currentPerson = personRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName()).get();
-            String firstname = person.getFirstName();
-            if (firstname != null) {
-                currentPerson.setFirstName(firstname);
-            }
-            String lastname = person.getLastName();
-            if (firstname != null) {
-                currentPerson.setLastName(lastname);
-            }
-            String email = person.getEmail();
-            if (email != null) {
-                currentPerson.setEmail(email);
-            }
-            String address = person.getAddress();
-            if (address != null) {
-                currentPerson.setAddress(address);
-            }
-            String city = person.getCity();
-            if (city != null) {
-                currentPerson.setCity(city);
-            }
-            String zip = person.getZip();
-            if (zip != null) {
-                currentPerson.setZip(zip);
-            }
-            String phone = person.getPhone();
-            if (phone != null) {
-                currentPerson.setPhone(phone);
-            }
+        lenient().when(personRepository.findByFirstNameAndLastName("Jack", "Jekyll")).thenReturn(Optional.of(person));
+        if (person != null) {
+            personService.updatePerson("Jack", "Jekyll", person);
             verify(personRepository, times(1)).save(person);
-
-            assertEquals(person.getFirstName(), currentPerson.getFirstName());
-            assertEquals(person.getLastName(), currentPerson.getLastName());
-            assertEquals(person.getAddress(), currentPerson.getAddress());
-            assertEquals(person.getEmail(), currentPerson.getEmail());
-            assertEquals(person.getCity(), currentPerson.getCity());
-            assertEquals(person.getPhone(), currentPerson.getPhone());
-            assertEquals(person.getZip(), currentPerson.getZip());
-
         }
-    }
+        else {
+            verify(personRepository, times(0)).save(person);
+        }
+        }
+
     @Test
     public void UpdatePersonButDoesntExist() {
         personService.updatePerson("David", "Finch", person);

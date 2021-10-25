@@ -55,9 +55,9 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     @Override
     public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord, String firstName, String lastName) {
-        List<MedicalRecord> mR = medicalRecordRepository.findMedicalRecordByFirstNameAndLastName(firstName, lastName);
-        if (mR != null) {
-            MedicalRecord currentMedicalRecord = mR.get(0);
+        Optional<MedicalRecord> mR = medicalRecordRepository.findAllByFirstNameAndLastName(firstName, lastName);
+        if (mR.isPresent()) {
+            MedicalRecord currentMedicalRecord = mR.get();
 
             String firstname = medicalRecord.getFirstName();
             if (firstname != null) {
@@ -84,7 +84,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             return currentMedicalRecord;
         }
         log.debug("Error attempting to update a MedicalRecord in [MedicalRecord/updateMedicalRecord");
-        return null;
+        return mR.get();
     }
 }
 

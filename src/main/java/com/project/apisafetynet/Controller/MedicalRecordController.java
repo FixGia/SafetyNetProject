@@ -1,15 +1,11 @@
 package com.project.apisafetynet.Controller;
 
 import com.project.apisafetynet.Service.MedicalRecordService;
-import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
-import com.project.apisafetynet.model.ModelRepository.Medications;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -83,11 +79,13 @@ public class MedicalRecordController {
 
 
         MedicalRecord mR = medicalRecordService.updateMedicalRecord(medicalRecord, firstName, lastName);
-        if ( mR!= null) {
+        if (mR!= null) {
+
             MedicalRecord medicalRecordToUpdate= mR;
             log.info("Request is a success"+mR+" is updated");
             return new ResponseEntity<>(medicalRecordToUpdate, HttpStatus.OK);
-        } else {
+        }
+        else {
             log.error(" Fail to update "+ firstName+" "+ lastName+"'s medicalRecord because it doesn't exist");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

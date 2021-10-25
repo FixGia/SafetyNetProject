@@ -181,12 +181,15 @@ public class FireStationServiceTest {
 
     @Test
     public void updateFireStationTest() {
-        fireStationService.updateFireStation(fireStation.getId());
-        verify(fireStationRepository, times(1)).findById(fireStation.getId());
-        if (fireStationRepository.findById(fireStation.getId()).isPresent()){
+        lenient().when(fireStationRepository.findById(1L)).thenReturn(Optional.of(fireStation));
+        if (fireStation != null) {
+            fireStationService.updateFireStation(1L);
             verify(fireStationRepository, times(1)).save(fireStation);
         }
-    }
+        else {
+            verify(fireStationRepository, times(0)).save(fireStation);
+            }
+        }
     @Test
     public void updateFireStationButDoesntExistTest() {
 
