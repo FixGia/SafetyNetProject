@@ -132,7 +132,7 @@ public class PersonServiceImpl implements PersonService {
                 currentPerson.setFirstName(firstname);
             }
             String lastname = person.getLastName();
-            if (firstname != null) {
+            if (lastname != null) {
                 currentPerson.setLastName(lastname);
             }
             String email = person.getEmail();
@@ -156,6 +156,7 @@ public class PersonServiceImpl implements PersonService {
                 currentPerson.setPhone(phone);
             }
             personRepository.save(currentPerson);
+            return Optional.of(currentPerson);
         }
         return p;
     }

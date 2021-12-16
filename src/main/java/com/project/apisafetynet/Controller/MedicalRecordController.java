@@ -2,6 +2,7 @@ package com.project.apisafetynet.Controller;
 
 import com.project.apisafetynet.Service.MedicalRecordService;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class MedicalRecordController {
      * @param
      * @return a MedicalRecord Object
      */
+    @ApiOperation(" get medicalrecord")
     @GetMapping()
     public ResponseEntity<MedicalRecord> getMedicalRecord (@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
         String functionPath = CLASSPATH + "getMedicalRecord";
@@ -48,6 +50,7 @@ public class MedicalRecordController {
      * @param
      * @return Create a medicalRecord
      */
+    @ApiOperation(" create medicalrecord")
     @PostMapping()
     public ResponseEntity<MedicalRecord> createMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
         String functionPath = CLASSPATH + "createMedicalRecord";
@@ -71,6 +74,7 @@ public class MedicalRecordController {
      * @param lastName lastName of Person's MedicalRecord
      * @return A medicalRecord Object updated
      */
+    @ApiOperation(" update medicalrecord")
     @PutMapping()
     public ResponseEntity<MedicalRecord> updateMedicalRecord(@RequestParam("firstName")String firstName,@RequestParam("lastName") String lastName,@RequestBody MedicalRecord medicalRecord ) {
 
@@ -96,6 +100,7 @@ public class MedicalRecordController {
      * @param medicalRecord a medicalRecord object
      * @return Delete MedicalRecord
      */
+    @ApiOperation(" delete medicalrecord")
     @DeleteMapping()
     public ResponseEntity<MedicalRecord> deleteMedicalRecord(@RequestParam("firstName") String firstName, @RequestParam("lastName")String lastName, MedicalRecord medicalRecord) {
         String functionPath = CLASSPATH + "deleteMedicalRecord";

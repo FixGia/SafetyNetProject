@@ -4,6 +4,7 @@ import com.project.apisafetynet.Service.PersonService;
 import com.project.apisafetynet.model.DTO.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.ModelRepository.Person;
 import com.project.apisafetynet.model.DTO.PersonInformation;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class PersonController {
      * @param person An object person
      * @return The person object saved
      */
+    @ApiOperation("create person")
     @PostMapping("/person")
     public ResponseEntity<Person> createPerson(@RequestParam String firstName, String lastName, Person person) {
         String functionPath = CLASSPATH + "createPerson";
@@ -49,6 +51,7 @@ public class PersonController {
      * @param lastName of Person
      * @return Person
      */
+    @ApiOperation(" get a person by firstname and lastname")
     @GetMapping("/person")
     public ResponseEntity<Person> getPerson(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
 
@@ -74,6 +77,7 @@ public class PersonController {
      * @param person    - The person object is updated
      * @return person - The person object updated
      */
+    @ApiOperation(" update a person by firstname and lastname")
     @PutMapping("/person")
     public ResponseEntity<Person> updatePerson(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, Person person) {
 
@@ -97,6 +101,7 @@ public class PersonController {
      * @param lastName  of Person
      * @return person - The Person is deleted
      */
+    @ApiOperation(" delete a person with firstname and lastname")
     @DeleteMapping("/person")
     public ResponseEntity<Person> deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
 
@@ -116,11 +121,12 @@ public class PersonController {
     /**
      * get Person information by firstName and lastName
      *
-     * @param firstName
-     * @param lastName
+     * @param firstName person's firstname
+     * @param lastName person's lastname
      * @return Person's information
      */
     @GetMapping("/personInfo")
+    @ApiOperation(" get every information about a  with firstname and lastname")
     public ResponseEntity<ArrayList<PersonInformation>> getPersonInformationList(@RequestParam String firstName, @RequestParam String lastName) {
 
         String functionPath = CLASSPATH + "getPersonInformationList";
@@ -145,6 +151,7 @@ public class PersonController {
      * @return a list with child and his family's member
      */
     @GetMapping("/childAlert")
+    @ApiOperation(" get every child and his family's member with his address")
     public ResponseEntity<ChildrenAndFamilyMembers> getChildAndFamilyMembers(@RequestParam String address) {
 
         String functionPath = CLASSPATH + "getChildAndFamilyMembers";
@@ -167,6 +174,7 @@ public class PersonController {
      * @return A Email's list
      */
     @GetMapping("/communityEmail")
+    @ApiOperation(" get every person's email who live in this city")
     public ResponseEntity<ArrayList<String>> getEmailByCity(@RequestParam String city) {
 
         String functionPath = CLASSPATH + "getEmailByCity";

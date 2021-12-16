@@ -26,10 +26,9 @@ public class FireStationServiceTest {
 
     private FireStation fireStation;
     private MedicalRecord medicalRecord;
-    private Person person;
-    private List<Person> personArrayList = new ArrayList<>();
-    private ArrayList<FireStation> fireStationsArrayList = new ArrayList<>();
-    private List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    private final List<Person> personArrayList = new ArrayList<>();
+    private final ArrayList<FireStation> fireStationsArrayList = new ArrayList<>();
+    private final List<MedicalRecord> medicalRecordList = new ArrayList<>();
 
 
     @Mock
@@ -46,7 +45,7 @@ public class FireStationServiceTest {
 
     @BeforeEach
     private void setUpBeforeEachTests() {
-        person = new Person();
+        Person person = new Person();
         person.setId(1L);
         person.setFirstName("Jack");
         person.setLastName("Jekyll");
@@ -115,9 +114,9 @@ public class FireStationServiceTest {
     @Test
     public void getListPersonInformationByFireStationTest() {
 
-        when(fireStationRepository.findFireStationByStation(any(String.class))).thenReturn((ArrayList<FireStation>) fireStationsArrayList);
+        when(fireStationRepository.findFireStationByStation(any(String.class))).thenReturn(fireStationsArrayList);
         when(personRepository.findPersonByAddress(any(String.class))).thenReturn((ArrayList<Person>) personArrayList);
-        when(medicalRecordRepository.findMedicalRecordByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn((ArrayList<MedicalRecord>) medicalRecordList);
+        when(medicalRecordRepository.findMedicalRecordByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn(medicalRecordList);
 
         Optional<InfoByZone> infoByZone = fireStationService.getListPersonInformationByFireStation(fireStation.getStation());
         assertNotNull(infoByZone);
@@ -133,7 +132,7 @@ public class FireStationServiceTest {
 
     @Test
     public void getPhoneNumberByStationTest() {
-        when(fireStationRepository.findFireStationByStation(any(String.class))).thenReturn((ArrayList<FireStation>) fireStationsArrayList);
+        when(fireStationRepository.findFireStationByStation(any(String.class))).thenReturn(fireStationsArrayList);
         when(personRepository.findPersonByAddress(any(String.class))).thenReturn((ArrayList<Person>) personArrayList);
 
         ArrayList<PhoneAlert> phoneAlerts = fireStationService.getPhoneNumberByStation(fireStation.getAddress());

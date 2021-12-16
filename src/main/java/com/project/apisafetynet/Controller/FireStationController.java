@@ -6,6 +6,8 @@ import com.project.apisafetynet.model.DTO.InfoByZone;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
 import com.project.apisafetynet.model.DTO.PersonsAndFireStationWhoDeservedThem;
 import com.project.apisafetynet.model.DTO.PhoneAlert;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ public class FireStationController {
     }
 
     @GetMapping("/firestations")
+    @ApiOperation(" get every firestations ")
     public Iterable<FireStation> getFirestations() {
 
         String functionPath = CLASSPATH + "getFireStations";
@@ -41,6 +44,7 @@ public class FireStationController {
      * @param fireStation An object fireStation
      * @return create new fireStation
      */
+    @ApiOperation(" create a new firestation ")
     @PostMapping("/firestation")
     public ResponseEntity<FireStation> createFireStation(FireStation fireStation, @RequestParam ("Id") Long id) {
         String functionPath = CLASSPATH + "createFireStation";
@@ -62,6 +66,7 @@ public class FireStationController {
      *
      * @param id of object fireStation
      */
+    @ApiOperation(" delete firestation")
     @DeleteMapping("/firestation")
     public ResponseEntity<FireStation> deleteFireStation(@RequestParam("Id") Long id) {
             String functionPath = CLASSPATH + "deleteFireStation";
@@ -84,6 +89,7 @@ public class FireStationController {
      * @param id of object fireStation
      * @return an update FireStation
      */
+    @ApiOperation(" return firestation updated")
     @PutMapping("/firestation")
     public ResponseEntity<FireStation> updateFireStation(@RequestParam("Id") Long id) {
 
@@ -105,6 +111,7 @@ public class FireStationController {
      * @param station
      * @return
      */
+    @ApiOperation("return every person's information by station number")
     @GetMapping("/firestation")
     public ResponseEntity<Optional<InfoByZone>> getPersonInfoByFireStation(@RequestParam("station") String station) {
         String functionPath = CLASSPATH + "getPersonInfoByFireStation";
@@ -125,6 +132,7 @@ public class FireStationController {
      * @param station
      * @return
      */
+    @ApiOperation("return every phone number by station number")
     @GetMapping("/phoneNumber")
     public ResponseEntity<ArrayList<PhoneAlert>> getPhoneNumber(@RequestParam("station") String station) {
             String functionPath = CLASSPATH + "getPhoneNumber";
@@ -142,6 +150,7 @@ public class FireStationController {
      * @param address
      * @return
      */
+    @ApiOperation(" return a list of person deserved by station")
     @GetMapping("/fire")
     public ResponseEntity<ArrayList<PersonsAndFireStationWhoDeservedThem>> getListPersonDeservedByStation(@RequestParam("address") String address) {
         String functionPath = CLASSPATH + "getListPersonDeservedByStation";
@@ -161,6 +170,7 @@ public class FireStationController {
      * @return
      */
 
+    @ApiOperation(" return every flood by stations")
     @GetMapping("/flood/stations")
     public ResponseEntity<ArrayList<Flood>> getFloodByStations(@RequestParam("stations") ArrayList<String> stations) {
         String functionPath = CLASSPATH + "getFloodByStations";

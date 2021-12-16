@@ -1,5 +1,4 @@
 package com.project.apisafetynet.Service;
-
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 
 import java.util.List;
