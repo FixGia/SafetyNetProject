@@ -185,17 +185,17 @@ public class FireStationServiceImp implements FireStationService {
     }
 
     @Override
-    public Optional<FireStation> updateFireStation(Long id) {
+    public Optional<FireStation> updateFireStation(Long id, FireStation fireStation) {
 
         Optional<FireStation> f = fireStationRepository.findById(id);
         if (f.isPresent()) {
             FireStation currentFireStation = f.get();
 
-            String address = currentFireStation.getAddress();
+            String address = fireStation.getAddress();
             if (address != null) {
                 currentFireStation.setAddress(address);
             }
-            String station = currentFireStation.getStation();
+            String station = fireStation.getStation();
             if (station != null) {
                 currentFireStation.setStation(station);
             }

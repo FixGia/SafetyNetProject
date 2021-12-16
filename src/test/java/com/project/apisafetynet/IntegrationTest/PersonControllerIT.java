@@ -77,9 +77,10 @@ public class PersonControllerIT {
                 .andExpect(status().isOk());
     }
     @Test
+    @Order(6)
     void UpdatePersonButDoesntExist() throws Exception {
         mockMvc.perform(put("/person")
-                        .param("firstName", "firstNameTest").param("lastName", "lastNameTest")
+                        .param("firstName", "firstNameTest2").param("lastName", "lastNameTest2")
                         .param("address", "addressModify")
                         .param("email", "emailModify")
                         .param("zip", "0000")

@@ -56,7 +56,7 @@ public class FireStationControllerTest {
     @Test
     public void testUpdateFireStation() throws Exception{
         FireStation fireStation = new FireStation();
-        when(fireStationService.updateFireStation(any(Long.class))).thenReturn(Optional.of(fireStation));
+        when(fireStationService.updateFireStation(any(Long.class), any(FireStation.class))).thenReturn(Optional.of(fireStation));
         mockMvc.perform(put("/firestation").param ("Id", "1")).andExpect(status().isOk());
     }
     @Test

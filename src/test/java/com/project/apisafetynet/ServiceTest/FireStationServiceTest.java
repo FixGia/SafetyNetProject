@@ -182,7 +182,7 @@ public class FireStationServiceTest {
     public void updateFireStationTest() {
         lenient().when(fireStationRepository.findById(1L)).thenReturn(Optional.of(fireStation));
         if (fireStation != null) {
-            fireStationService.updateFireStation(1L);
+            fireStationService.updateFireStation(1L, fireStation);
             verify(fireStationRepository, times(1)).save(fireStation);
         }
         else {
@@ -192,7 +192,7 @@ public class FireStationServiceTest {
     @Test
     public void updateFireStationButDoesntExistTest() {
 
-        fireStationService.updateFireStation(450L);
+        fireStationService.updateFireStation(450L, fireStation);
 
         verify(fireStationRepository, times(1)).findById(450L);
 

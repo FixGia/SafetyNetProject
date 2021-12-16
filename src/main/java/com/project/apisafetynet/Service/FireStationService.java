@@ -30,5 +30,5 @@ public interface FireStationService{
 
     ArrayList<Flood> getListOfFloodsByStations (ArrayList<String> stations);
 
-    Optional<FireStation> updateFireStation(Long id);
+    Optional<FireStation> updateFireStation(Long id, FireStation fireStation);
 }

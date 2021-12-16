@@ -91,12 +91,12 @@ public class FireStationController {
      */
     @ApiOperation(" return firestation updated")
     @PutMapping("/firestation")
-    public ResponseEntity<FireStation> updateFireStation(@RequestParam("Id") Long id) {
+    public ResponseEntity<FireStation> updateFireStation(@RequestParam("Id") Long id, FireStation fireStation) {
 
         String functionPath = CLASSPATH + "updateFireStation";
         log.info("Request received in " + functionPath);
 
-            Optional<FireStation> f = fireStationService.updateFireStation(id);
+            Optional<FireStation> f = fireStationService.updateFireStation(id, fireStation);
             if (f.isPresent()) {
                 FireStation currentFireStation = f.get();
                 log.info("Request is a success, FireStation with Id "+id+" is updated");
