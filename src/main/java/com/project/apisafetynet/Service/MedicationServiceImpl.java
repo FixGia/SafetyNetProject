@@ -24,17 +24,4 @@ public class MedicationServiceImpl implements MedicationService {
         return medicationsRepository.saveAll(medications);
     }
 
-    @Override
-    public Optional<Medications> updateMedications(String nameMedication) {
-        Optional<Medications> medications = medicationsRepository.findById(nameMedication);
-        if (medications.isPresent()) {
-            Medications currentMedication = medications.get();
-
-            String nameMedications = medications.get().getNameMedication();
-            if (nameMedications != null) {
-                currentMedication.setNameMedication(nameMedication);
-            }
-        }
-        return medications;
-    }
 }

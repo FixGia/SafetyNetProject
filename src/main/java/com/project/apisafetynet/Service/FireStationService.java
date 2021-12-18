@@ -4,6 +4,7 @@ import com.project.apisafetynet.model.DTO.Flood;
 import com.project.apisafetynet.model.DTO.InfoByZone;
 import com.project.apisafetynet.model.DTO.PersonsAndFireStationWhoDeservedThem;
 import com.project.apisafetynet.model.DTO.PhoneAlert;
+import com.project.apisafetynet.model.DTO.FirestationRequest;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
 
 import java.util.ArrayList;
@@ -30,5 +31,10 @@ public interface FireStationService{
 
     ArrayList<Flood> getListOfFloodsByStations (ArrayList<String> stations);
 
-    Optional<FireStation> updateFireStation(Long id, FireStation fireStation);
+    Optional<FireStation> updateFireStation(Long id, FirestationRequest fireStation);
+
+    FireStation getFirestationByAddress(String address);
+
+    FireStation createFireStation(FirestationRequest firestationRequest);
+
 }

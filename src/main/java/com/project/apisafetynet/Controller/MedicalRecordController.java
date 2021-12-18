@@ -2,6 +2,7 @@ package com.project.apisafetynet.Controller;
 
 import com.project.apisafetynet.Service.MedicalRecordService;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
+import com.project.apisafetynet.model.DTO.MedicalRecordRequest;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,10 +40,10 @@ public class MedicalRecordController {
             MedicalRecord medicalRecord = getMedicalRecord.get();
             return new ResponseEntity<>(medicalRecord, HttpStatus.OK);
         }
-        else {
+
             log.error("fail to get "+ firstName+" "+ lastName+ "'s MedicalRecord");
             return  new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+
     }
     /**
      * Create a medical Record
@@ -52,19 +53,19 @@ public class MedicalRecordController {
      */
     @ApiOperation(" create medicalrecord")
     @PostMapping()
-    public ResponseEntity<MedicalRecord> createMedicalRecord(MedicalRecord medicalRecord, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+    public ResponseEntity<MedicalRecord> createMedicalRecord(@RequestBody MedicalRecordRequest medicalRecord) {
+
         String functionPath = CLASSPATH + "createMedicalRecord";
-        log.info("Request received in"+ functionPath);
-        Optional<MedicalRecord> mR= medicalRecordService.getMedicalRecord(firstName,lastName);
-        if (mR.isEmpty()) {
+        log.info("Request received in" + functionPath);
+
+        try {
             log.info("Request is a success");
-            medicalRecordService.saveMedicalRecord(medicalRecord);
-            return new ResponseEntity<>(medicalRecord, HttpStatus.CREATED);
-        } else {
-            log.error("Fail to save"+firstName+ lastName+" because is already exist");
+            MedicalRecord createMedicalRecord = medicalRecordService.createMedicalRecord(medicalRecord);
+            return new ResponseEntity<>(createMedicalRecord, HttpStatus.CREATED);
+        } catch (Exception exception) {
+            log.error("Fail to save new MedicalRecord ");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-
     }
 
     /**
@@ -74,9 +75,9 @@ public class MedicalRecordController {
      * @param lastName lastName of Person's MedicalRecord
      * @return A medicalRecord Object updated
      */
-    @ApiOperation(" update medicalrecord")
+    @ApiOperation("update medicalrecord")
     @PutMapping()
-    public ResponseEntity<MedicalRecord> updateMedicalRecord(@RequestParam("firstName")String firstName,@RequestParam("lastName") String lastName,@RequestBody MedicalRecord medicalRecord ) {
+    public ResponseEntity<MedicalRecord> updateMedicalRecord(@RequestParam("firstName")String firstName,@RequestParam("lastName") String lastName,@RequestBody MedicalRecordRequest medicalRecord ) {
 
         String functionPath = CLASSPATH + "updateMedicalRecord";
         log.info("Request received in"+ functionPath);
@@ -89,22 +90,23 @@ public class MedicalRecordController {
             log.info("Request is a success"+mR+" is updated");
             return new ResponseEntity<>(medicalRecordToUpdate, HttpStatus.OK);
         }
-        else {
+
             log.error(" Fail to update "+ firstName+" "+ lastName+"'s medicalRecord because it doesn't exist");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+
     }
     /**
      * Delete MedicalRecord by firstName + lastName
      * @param
-     * @param medicalRecord a medicalRecord object
+     *
      * @return Delete MedicalRecord
      */
     @ApiOperation(" delete medicalrecord")
     @DeleteMapping()
-    public ResponseEntity<MedicalRecord> deleteMedicalRecord(@RequestParam("firstName") String firstName, @RequestParam("lastName")String lastName, MedicalRecord medicalRecord) {
+    public ResponseEntity<MedicalRecord> deleteMedicalRecord(@RequestParam("firstName") String firstName, @RequestParam("lastName")String lastName) {
         String functionPath = CLASSPATH + "deleteMedicalRecord";
         log.info("Request received in" + functionPath);
+
         Optional<MedicalRecord> mR = medicalRecordService.getMedicalRecord(firstName, lastName);
 
         if (mR.isPresent()) {
@@ -113,10 +115,10 @@ public class MedicalRecordController {
             MedicalRecord medicalRecordToDelete = mR.get();
             medicalRecordService.deleteMedicalRecord(medicalRecordToDelete);
             return new ResponseEntity<>(null, HttpStatus.OK);
-        } else {
+        }
             log.error("Fail to delete" + firstName + " " + lastName + " MedicalRecord because it doesn't exist in Db");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+
 
     }
 

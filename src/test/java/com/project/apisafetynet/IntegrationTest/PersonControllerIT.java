@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.MultiValueMap;
 
@@ -58,51 +59,65 @@ public class PersonControllerIT {
     @Order(3)
     @Test
     void UpdatePersonTest() throws Exception {
-        mockMvc.perform(put("/person")
-                        .param("firstName", "John").param("lastName", "Boyd")
-                        .param("address", "addressModify")
-                        .param("email", "emailModify")
-                        .param("zip", "0000")
-                        .param("phone", "0000000"))
+        String bodyContent ="{ \"address\": \"string\"," +
+                "\"city\": \"string\"," +
+                " \"email\": \"string\"," +
+                " \"firstName\": \"string\"," +
+                " \"lastName\": \"string\"," +
+                " \"phone\": \"string\"," +
+                " \"zip\": \"string\"}";
+        mockMvc.perform(put("/person").param("firstName", "John").param("lastName", "Boyd")
+                        .contentType(MediaType.APPLICATION_JSON).content(bodyContent))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/person")
-                        .param("firstName", "John")
-                        .param("lastName", "Boyd"))
-                .andExpect(jsonPath("$.firstName", is("John")))
-                .andExpect(jsonPath("$.lastName", is("Boyd")))
-                .andExpect(jsonPath("$.address", is("addressModify")))
-                .andExpect(jsonPath("$.email", is("emailModify")))
-                .andExpect(jsonPath("$.zip", is("0000")))
-                .andExpect(jsonPath("$.phone", is("0000000")))
+                        .param("firstName", "string")
+                        .param("lastName", "string"))
+                .andExpect(jsonPath("$.firstName", is("string")))
+                .andExpect(jsonPath("$.lastName", is("string")))
+                .andExpect(jsonPath("$.address", is("string")))
+                .andExpect(jsonPath("$.email", is("string")))
+                .andExpect(jsonPath("$.zip", is("string")))
+                .andExpect(jsonPath("$.phone", is("string")))
                 .andExpect(status().isOk());
     }
+
     @Test
     @Order(6)
     void UpdatePersonButDoesntExist() throws Exception {
+        String bodyContent ="{ \"address\": \"string\"," +
+                "\"city\": \"string\"," +
+                " \"email\": \"string\"," +
+                " \"firstName\": \"string\"," +
+                " \"lastName\": \"string\"," +
+                " \"phone\": \"string\"," +
+                " \"zip\": \"string\"}";
         mockMvc.perform(put("/person")
                         .param("firstName", "firstNameTest2").param("lastName", "lastNameTest2")
-                        .param("address", "addressModify")
-                        .param("email", "emailModify")
-                        .param("zip", "0000")
-                        .param("phone", "0000000"))
+                        .contentType(MediaType.APPLICATION_JSON).content(bodyContent))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Order(4)
     void CreatePersonTest() throws Exception {
+        String bodyContent ="{ \"address\": \"12 rue du test\"," +
+                "\"city\": \"Victory\"," +
+                " \"email\": \"Test@gmail.com\"," +
+                " \"firstName\": \"Jean\"," +
+                " \"lastName\": \"Test\"," +
+                " \"phone\": \"050505050\"," +
+                " \"zip\": \"0000\"}";
         mockMvc.perform(post("/person")
-                .param("firstName", "firstNameTest")
-                .param("lastName", "lastNameTest"))
+                        .contentType(MediaType.APPLICATION_JSON).content(bodyContent))
                 .andExpect(status().isCreated());
-        mockMvc.perform(get("/person").param("firstName", "firstNameTest").param("lastName", "lastNameTest")).andExpect(status().isOk());
+        mockMvc.perform(get("/person").param("firstName", "Jean").param("lastName", "Test")).andExpect(status().isOk());
     }
 
     @Test
     @Order(5)
     void DeletePersonTest() throws Exception {
-        mockMvc.perform(delete("/person").param("firstName","John").param("lastName", "Boyd")).andExpect(status().isOk());
-        mockMvc.perform(get("/person").param("firstName","John").param("lastName", "Boyd")).andExpect(status().isNotFound());
+        mockMvc.perform(delete("/person").param("firstName","Jacob").param("lastName", "Boyd")).andExpect(status().isOk());
+        mockMvc.perform(get("/person").param("firstName","Jacob").param("lastName", "Boyd")).andExpect(status().isNotFound());
     }
 }
 

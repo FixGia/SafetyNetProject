@@ -4,12 +4,10 @@ import com.project.apisafetynet.Service.FireStationService;
 import com.project.apisafetynet.Service.LoadJsonFile;
 import com.project.apisafetynet.Service.MedicalRecordService;
 import com.project.apisafetynet.Service.PersonService;
-import com.project.apisafetynet.model.DTO.Child;
+import com.project.apisafetynet.model.DTO.PersonRequest;
 import com.project.apisafetynet.model.DTO.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.DTO.PersonInformation;
-import com.project.apisafetynet.model.ModelRepository.Allergies;
-import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
-import com.project.apisafetynet.model.ModelRepository.Medications;
+
 import com.project.apisafetynet.model.ModelRepository.Person;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
@@ -76,7 +74,7 @@ public class PersonControllerTest {
 
     @Test
     public void testCreatePerson() throws  Exception {
-        mockMvc.perform(post("/person").param("firstName","Jack").param("lastName","Bekyll")).andExpect(status().isCreated());
+        mockMvc.perform(post("/person").contentType(MediaType.APPLICATION_JSON).content("{}")).andExpect(status().isCreated());
     }
 
     @Test
@@ -98,7 +96,7 @@ public class PersonControllerTest {
                 "\"phone\":\"000000023\",\n" +
                 "\"email\":\"emailTest\"\n" +
                 "}";
-        when(personService.updatePerson(any(String.class),any(String.class),any(Person.class))).thenReturn(Optional.of(personTest));
+        when(personService.updatePerson(any(String.class),any(String.class),any(PersonRequest.class))).thenReturn(personTest);
         mockMvc.perform(put("/person").param("firstName", "firstNameTest")
                         .param("lastName", "lastNameTest")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +108,8 @@ public class PersonControllerTest {
     @Test
     void UpdatePersonButPersonNotExistTest() throws Exception {
         mockMvc.perform(put("/person")
-                .param("firstName", "David").param("lastName", "Hassel")).andExpect(status().isNotFound());
+                .param("firstName", "David").param("lastName", "Hassel").contentType(MediaType.APPLICATION_JSON)
+                .content("{}")).andExpect(status().isNotFound());
     }
 
     @Test

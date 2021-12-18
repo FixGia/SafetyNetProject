@@ -46,8 +46,10 @@ public class MedicalRecordControllerIT {
 
     @Test
     void createMedicalRecordTest() throws Exception {
-        mockMvc.perform(post("/medicalRecord").param("firstName", "firstNameTest").param("lastName", "lastNameTest")).andExpect(status().isCreated());
-        mockMvc.perform(get("/medicalRecord").param("firstName", "firstNameTest").param("lastName", "lastNameTest")).andExpect(status().isOk());
+        String bodyContent = "{\"firstName\":\"firstnameTest\",\"lastName\":\"lastnameTest\",\"birthdate\":\"birthDateTest1\",\"medications\":[{\"nameMedication\":\"aznol:350mg\"}],\"allergies\":[{\"nameAllergies\":\"shellfish\"}]}";
+        mockMvc.perform(post("/medicalRecord") .contentType(MediaType.APPLICATION_JSON)
+                .content(bodyContent)).andExpect(status().isCreated());
+        mockMvc.perform(get("/medicalRecord").param("firstName", "firstnameTest").param("lastName", "lastnameTest")).andExpect(status().isOk());
     }
     @Test
     void updateMedicalRecordButForgetJsonBodyTest() throws Exception{

@@ -6,6 +6,7 @@ import com.project.apisafetynet.Service.CalculateAgeServiceImpl;
 import com.project.apisafetynet.Service.PersonServiceImpl;
 import com.project.apisafetynet.model.DTO.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.DTO.FamilyMembers;
+import com.project.apisafetynet.model.DTO.PersonRequest;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Medications;
@@ -103,6 +104,27 @@ public class PersonServiceTest {
     }
 
     @Test
+    public void createPersonTest(){
+        PersonRequest personRequest = new PersonRequest();
+        personRequest.setAddress("address");
+        personRequest.setEmail("email");
+        personRequest.setCity("city");
+        personRequest.setFirstName("firstname");
+        personRequest.setLastName("lastname");
+        personRequest.setZip("zip");
+        personRequest.setPhone("phone");
+        Person createPerson = personService.createPerson(personRequest);
+        assertEquals(createPerson.getCity(), "city");
+        assertEquals(createPerson.getEmail(), "email");
+        assertEquals(createPerson.getPhone(), "phone");
+        assertEquals(createPerson.getZip(),"zip");
+        assertEquals(createPerson.getFirstName(), "firstname");
+        assertEquals(createPerson.getLastName(), "lastname");
+        assertEquals(createPerson.getAddress(), "address");
+        verify(personRepository, times(1)).save(createPerson);
+    }
+
+    @Test
     public void getPersonTest() {
         personService.getPerson("Jack", "Jekyll");
         verify(personRepository, times(1)).findByFirstNameAndLastName("Jack", "Jekyll");
@@ -180,9 +202,24 @@ public class PersonServiceTest {
 
     @Test
     public void UpdatePersonTest() {
+        PersonRequest personRequest = new PersonRequest();
+        personRequest.setAddress("address");
+        personRequest.setEmail("email");
+        personRequest.setCity("city");
+        personRequest.setFirstName("firstname");
+        personRequest.setLastName("lastname");
+        personRequest.setZip("zip");
+        personRequest.setPhone("phone");
         lenient().when(personRepository.findByFirstNameAndLastName("Jack", "Jekyll")).thenReturn(Optional.of(person));
         if (person != null) {
-            personService.updatePerson("Jack", "Jekyll", person);
+            personService.updatePerson("Jack", "Jekyll", personRequest);
+            assertEquals(person.getFirstName(), "firstname");
+            assertEquals(person.getAddress(), "address");
+            assertEquals(person.getZip(), "zip");
+            assertEquals(person.getPhone(), "phone");
+            assertEquals(person.getLastName(), "lastname");
+            assertEquals(person.getCity(), "city");
+            assertEquals(person.getEmail(), "email");
             verify(personRepository, times(1)).save(person);
         }
         else {
@@ -190,10 +227,4 @@ public class PersonServiceTest {
         }
         }
 
-    @Test
-    public void UpdatePersonButDoesntExist() {
-        personService.updatePerson("David", "Finch", person);
-        verify(personRepository, times(0)).findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-        verify(personRepository, times(0)).save(person);
-    }
 }

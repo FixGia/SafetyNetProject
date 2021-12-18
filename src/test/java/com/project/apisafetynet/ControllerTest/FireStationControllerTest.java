@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -56,16 +57,16 @@ public class FireStationControllerTest {
     @Test
     public void testUpdateFireStation() throws Exception{
         FireStation fireStation = new FireStation();
-        when(fireStationService.updateFireStation(any(Long.class), any(FireStation.class))).thenReturn(Optional.of(fireStation));
-        mockMvc.perform(put("/firestation").param ("Id", "1")).andExpect(status().isOk());
+        when(fireStationService.updateFireStation(any(Long.class), any(FirestationRequest.class))).thenReturn(Optional.of(fireStation));
+        mockMvc.perform(put("/firestation").param ("Id", "1").contentType(MediaType.APPLICATION_JSON).content("{}")).andExpect(status().isOk());
     }
     @Test
     public void testUpdateFireStationButItDoesntExist() throws Exception{
-        mockMvc.perform(put("/firestation").param ("Id", "2")).andExpect(status().isNotFound());
+        mockMvc.perform(put("/firestation").param ("Id", "2").contentType(MediaType.APPLICATION_JSON).content("{}")).andExpect(status().isNotFound());
     }
     @Test
     public void testCreateFireStation() throws Exception{
-        mockMvc.perform(post("/firestation").param ("Id", "1")).andExpect(status().isCreated());
+        mockMvc.perform(post("/firestation").contentType(MediaType.APPLICATION_JSON).content("{}")).andExpect(status().isCreated());
     }
     @Test
     public void testCreateFireStationButItAlreadyExist() throws Exception{

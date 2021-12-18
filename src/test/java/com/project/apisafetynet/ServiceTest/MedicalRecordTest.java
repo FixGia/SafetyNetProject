@@ -4,6 +4,7 @@ import com.project.apisafetynet.Repository.AllergiesRepository;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.MedicationsRepository;
 import com.project.apisafetynet.Service.MedicalRecordServiceImpl;
+import com.project.apisafetynet.model.DTO.MedicalRecordRequest;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 
@@ -86,17 +87,30 @@ public class MedicalRecordTest {
     }
 
     @Test
-    public void createMedicalRecordTest(){
+    public void saveMedicalRecordTest(){
         MedicalRecord medicalRecord= new MedicalRecord();
         medicalRecordService.saveMedicalRecord(medicalRecord);
         verify(medicalRecordRepository, times(1)).save(medicalRecord);
     }
 
     @Test
+    public void createMedicalRecordTest(){
+        MedicalRecordRequest medicalRecordRequest= new MedicalRecordRequest();
+        medicalRecordRequest.setFirstName("firstname");
+        medicalRecordRequest.setLastName("lastname");
+        medicalRecordRequest.setBirthdate("birthdate");
+        MedicalRecord createMedicalRecord = medicalRecordService.createMedicalRecord(medicalRecordRequest);
+        assertEquals(createMedicalRecord.getFirstName(), "firstname");
+        assertEquals(createMedicalRecord.getLastName(), "lastname");
+        assertEquals(createMedicalRecord.getBirthdate(), "birthdate");
+        verify(medicalRecordRepository, times(1)).save(createMedicalRecord);
+    }
+
+    @Test
     public void updateMedicalRecordTest() {
         lenient().when(medicalRecordRepository.findAllByFirstNameAndLastName("Jack", "Jekyll")).thenReturn(Optional.of(medicalRecord));
         if(medicalRecord != null) {
-            medicalRecordService.updateMedicalRecord(medicalRecord, "Jack", "Jekyll");
+            medicalRecordService.updateMedicalRecord(new MedicalRecordRequest(), "Jack", "Jekyll");
             verify(medicalRecordRepository, times(1)).save(medicalRecord);
         }
             else {

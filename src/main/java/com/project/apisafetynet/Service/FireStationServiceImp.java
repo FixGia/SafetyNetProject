@@ -3,6 +3,7 @@ import com.project.apisafetynet.Repository.FireStationRepository;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
 import com.project.apisafetynet.model.DTO.*;
+import com.project.apisafetynet.model.DTO.FirestationRequest;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
@@ -53,8 +54,20 @@ public class FireStationServiceImp implements FireStationService {
         return  Optional.of(fireStation);
 
     }
+    public FireStation createFireStation(FirestationRequest firestationRequest) {
 
-    @Override
+        Optional<FireStation> searchFirestation = fireStationRepository.findFireStationByAddress(firestationRequest.getAddress());
+        if (!searchFirestation.isPresent()) {
+            FireStation createFirestation = new FireStation();
+            createFirestation.setStation(firestationRequest.getStation());
+            createFirestation.setAddress(firestationRequest.getAddress());
+            fireStationRepository.save(createFirestation);
+            return createFirestation;
+        }
+        log.error("firestation with {} already exist", firestationRequest.getAddress());
+        return null;
+    }
+        @Override
     public Iterable<FireStation> getFireStations() {
         return this.fireStationRepository.findAll();
     }
@@ -62,6 +75,11 @@ public class FireStationServiceImp implements FireStationService {
     @Override
     public Optional<FireStation> getFireStation(long id) {
         return this.fireStationRepository.findById(id);
+    }
+
+    public FireStation getFirestationByAddress(String address){
+       Optional<FireStation> fireStation =  fireStationRepository.findFireStationByAddress(address);
+        return fireStation.get();
     }
 
     @Override
@@ -185,7 +203,7 @@ public class FireStationServiceImp implements FireStationService {
     }
 
     @Override
-    public Optional<FireStation> updateFireStation(Long id, FireStation fireStation) {
+    public Optional<FireStation> updateFireStation(Long id, FirestationRequest fireStation) {
 
         Optional<FireStation> f = fireStationRepository.findById(id);
         if (f.isPresent()) {

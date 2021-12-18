@@ -6,7 +6,7 @@ import com.project.apisafetynet.model.DTO.InfoByZone;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
 import com.project.apisafetynet.model.DTO.PersonsAndFireStationWhoDeservedThem;
 import com.project.apisafetynet.model.DTO.PhoneAlert;
-import io.swagger.annotations.Api;
+import com.project.apisafetynet.model.DTO.FirestationRequest;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -34,32 +34,31 @@ public class FireStationController {
 
         String functionPath = CLASSPATH + "getFireStations";
         log.info("Request received in " + functionPath);
-        Iterable<FireStation> getFireStations = fireStationService.getFireStations();
-        return getFireStations;
+        return fireStationService.getFireStations();
     }
 
     /**
      * Create a new fireStation
      *
-     * @param fireStation An object fireStation
+     * @param firestationRequest An object fireStation
      * @return create new fireStation
      */
     @ApiOperation(" create a new firestation ")
     @PostMapping("/firestation")
-    public ResponseEntity<FireStation> createFireStation(FireStation fireStation, @RequestParam ("Id") Long id) {
+    public ResponseEntity<FireStation> createFireStation(@RequestBody FirestationRequest firestationRequest) {
+
         String functionPath = CLASSPATH + "createFireStation";
         log.info("Request received in " + functionPath);
 
-        Optional<FireStation> createFireStation = fireStationService.getFireStation(id);
-        if (createFireStation.isEmpty()) {
-            fireStationService.saveFireStation(fireStation);
-            log.info("Request is a success, FireStation " + id + " is created");
-            return new ResponseEntity<>(fireStation, HttpStatus.CREATED);
-        } else {
-            log.error("Fail to create FireStation" + id + " because is already exist");
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+        try {
+            FireStation createFireStation = fireStationService.createFireStation(firestationRequest);
+            log.info("Request is a success, FireStation with address: " + firestationRequest.getAddress() + " is created");
+            return new ResponseEntity<>(createFireStation, HttpStatus.CREATED);
+        } catch (Exception exception) {
+            log.error("Fail to create FireStation with address" + firestationRequest.getAddress() + " because is already exist");
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
+}
 
     /**
      * Delete FireStation by id
@@ -77,10 +76,9 @@ public class FireStationController {
            fireStationService.deleteFireStation(id);
             log.info("Request is a success, FireStation with Id : "+id+" is deleted");
             return new ResponseEntity<>(null, HttpStatus.OK);
-        } else {
+        }
             log.error("Fail to delete FireStation with Id "+id+ " because it doesn't exist in Db");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
     }
 
     /**
@@ -91,7 +89,7 @@ public class FireStationController {
      */
     @ApiOperation(" return firestation updated")
     @PutMapping("/firestation")
-    public ResponseEntity<FireStation> updateFireStation(@RequestParam("Id") Long id, FireStation fireStation) {
+    public ResponseEntity<FireStation> updateFireStation(@RequestParam("Id") Long id, @RequestBody FirestationRequest fireStation) {
 
         String functionPath = CLASSPATH + "updateFireStation";
         log.info("Request received in " + functionPath);
@@ -101,15 +99,15 @@ public class FireStationController {
                 FireStation currentFireStation = f.get();
                 log.info("Request is a success, FireStation with Id "+id+" is updated");
                 return new ResponseEntity<>(currentFireStation, HttpStatus.OK);
-            } else {
+            }
                 log.error("Fail to Update FireStation  with Id  "+id+" because it doesn't exist in DB");
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }
+
          }
 
     /**
-     * @param station
-     * @return
+     * @param station number's station
+     * @return Person Information By number Station
      */
     @ApiOperation("return every person's information by station number")
     @GetMapping("/firestation")
@@ -122,10 +120,9 @@ public class FireStationController {
                 log.info( "Request is a success, Person Information By FireStation : "+ PersonInfoByFireStationList);
                 return new ResponseEntity<>(PersonInfoByFireStationList, HttpStatus.OK);
 
-        } else {
+        }
                 log.error("Fail to get Person Information by FireStation number :"+station+ "because it doesn't exist in Db");
                 return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
-            }
     }
 
     /**
@@ -141,7 +138,7 @@ public class FireStationController {
             if (!phoneNumberByStation.isEmpty()) {
                 log.info("Request is a success phone Number list : "+phoneNumberByStation);
                 return new ResponseEntity<>(phoneNumberByStation, HttpStatus.OK);
-        } else
+        }
             log.error("Fail to get PhoneNumber by FireStation number:" + station);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
@@ -159,10 +156,9 @@ public class FireStationController {
         if (!ListPersonDeservedByStation.isEmpty()) {
             log.info("Request is a success, List Of Person Deserved By Station: " + ListPersonDeservedByStation);
             return new ResponseEntity<>(ListPersonDeservedByStation, HttpStatus.OK);
-        } else {
+        }
             log.error("Fail to get List of Person Deserved by FireStation address :" + address);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
     }
 
     /**
@@ -180,10 +176,9 @@ public class FireStationController {
         if (!FloodByStationsList.isEmpty()) {
             log.info("Request is a success, Flood By Station : " + FloodByStationsList);
             return new ResponseEntity<>(FloodByStationsList, HttpStatus.OK);
-        } else {
+        }
             log.error("Fail to get a list of Person Deserved by List of FireStations : " + stations);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
     }
 }
 

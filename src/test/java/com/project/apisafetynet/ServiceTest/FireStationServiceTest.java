@@ -182,17 +182,35 @@ public class FireStationServiceTest {
     public void updateFireStationTest() {
         lenient().when(fireStationRepository.findById(1L)).thenReturn(Optional.of(fireStation));
         if (fireStation != null) {
-            fireStationService.updateFireStation(1L, fireStation);
+            fireStationService.updateFireStation(1L, new FirestationRequest());
             verify(fireStationRepository, times(1)).save(fireStation);
         }
         else {
             verify(fireStationRepository, times(0)).save(fireStation);
             }
         }
+        @Test
+        public void createFireStationTest(){
+        FirestationRequest fireStationRequest= new FirestationRequest();
+        fireStationRequest.setStation("station");
+        fireStationRequest.setAddress("address");
+        FireStation fireStation = fireStationService.createFireStation(fireStationRequest);
+        assertEquals(fireStation.getStation(), "station");
+        assertEquals(fireStation.getAddress(), "address");
+        verify(fireStationRepository, times(1)).save(fireStation);
+        }
+
+        @Test
+        public void getFireStationByAddressTest(){
+        lenient().when(fireStationRepository.findFireStationByAddress("33 rue du test")).thenReturn(Optional.of(fireStation));
+        fireStationService.getFirestationByAddress("33 rue du test");
+        verify(fireStationRepository, times(1)).findFireStationByAddress("33 rue du test");
+        }
+
     @Test
     public void updateFireStationButDoesntExistTest() {
 
-        fireStationService.updateFireStation(450L, fireStation);
+        fireStationService.updateFireStation(450L, new FirestationRequest());
 
         verify(fireStationRepository, times(1)).findById(450L);
 

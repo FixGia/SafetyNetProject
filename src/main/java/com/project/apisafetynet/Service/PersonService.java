@@ -3,6 +3,7 @@ package com.project.apisafetynet.Service;
 
 import com.project.apisafetynet.model.DTO.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.ModelRepository.Person;
+import com.project.apisafetynet.model.DTO.PersonRequest;
 import com.project.apisafetynet.model.DTO.PersonInformation;
 
 import java.util.ArrayList;
@@ -27,7 +28,9 @@ public interface PersonService {
 
     Optional<ChildrenAndFamilyMembers> getListOfChildrenAndFamilyMembersByAddress(String address);
 
-    Optional<Person> updatePerson(String firstName, String lastName, Person person);
+    Person updatePerson(String firstName, String lastName, PersonRequest person);
+
+    Person createPerson(PersonRequest personRequest);
 
     }
 

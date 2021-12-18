@@ -8,6 +8,5 @@ public interface MedicationService {
 
     Iterable<Medications> saveAll(Iterable<Medications> medications);
 
-    Optional<Medications> updateMedications(String nameMedications);
 
 }

@@ -4,6 +4,7 @@ package com.project.apisafetynet.Service;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
 import com.project.apisafetynet.model.DTO.*;
+import com.project.apisafetynet.model.DTO.PersonRequest;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Person;
 import lombok.Data;
@@ -51,10 +52,6 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Optional<Person> savePerson(Person person) {
         try {
-            Optional<Person> personToCreate = personRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-            if (personToCreate.isPresent()){
-                return Optional.empty();
-            }
             personRepository.save(person);
         } catch (Exception e) {
             log.debug("Error attempting to add a new person in [PersonServiceImpl/savePerson] method");
@@ -121,9 +118,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Optional<Person> updatePerson(String firstName, String lastName, Person person) {
+    public Person updatePerson(String firstName, String lastName, PersonRequest person) {
 
         Optional<Person> p = personRepository.findByFirstNameAndLastName(firstName, lastName);
+
         if (p.isPresent()) {
             Person currentPerson = p.get();
 
@@ -156,9 +154,29 @@ public class PersonServiceImpl implements PersonService {
                 currentPerson.setPhone(phone);
             }
             personRepository.save(currentPerson);
-            return Optional.of(currentPerson);
+            return currentPerson;
         }
-        return p;
+        return p.get();
+    }
+
+    @Override
+    public Person createPerson(PersonRequest personRequest) {
+
+        Optional<Person> searchPerson = personRepository.findByFirstNameAndLastName(personRequest.getFirstName(), personRequest.getLastName());
+        if (!searchPerson.isPresent()) {
+            Person createPerson = new Person();
+            createPerson.setFirstName(personRequest.getFirstName());
+            createPerson.setLastName(personRequest.getLastName());
+            createPerson.setAddress(personRequest.getAddress());
+            createPerson.setCity(personRequest.getCity());
+            createPerson.setPhone(personRequest.getPhone());
+            createPerson.setZip(personRequest.getZip());
+            createPerson.setEmail(personRequest.getEmail());
+            personRepository.save(createPerson);
+            return createPerson;
+        }
+        log.error("We can't create a new Person because {} is already exist", searchPerson);
+        return null;
     }
 
     public ChildrenAndFamilyMembers buildChildrenAndFamilyMembers(@NotNull ArrayList<Person> personAtThisAddress) {

@@ -1,6 +1,7 @@
 package com.project.apisafetynet.Service;
 
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
+import com.project.apisafetynet.model.DTO.MedicalRecordRequest;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
 import com.project.apisafetynet.model.ModelRepository.Medications;
@@ -54,7 +55,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord, String firstName, String lastName) {
+    public MedicalRecord updateMedicalRecord(MedicalRecordRequest medicalRecord, String firstName, String lastName) {
+
         Optional<MedicalRecord> mR = medicalRecordRepository.findAllByFirstNameAndLastName(firstName, lastName);
         if (mR.isPresent()) {
             MedicalRecord currentMedicalRecord = mR.get();
@@ -74,7 +76,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             List<Medications> medications = medicalRecord.getMedications();
             if (medications != null) {
                 currentMedicalRecord.setMedications(medications);
-                }
+            }
 
             List<Allergies> allergies = medicalRecord.getAllergies();
             if (allergies != null) {
@@ -86,5 +88,25 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         log.debug("Error attempting to update a MedicalRecord in [MedicalRecord/updateMedicalRecord");
         return mR.get();
     }
+
+    @Override
+    public MedicalRecord createMedicalRecord(MedicalRecordRequest medicalRecordRequest) {
+
+        Optional<MedicalRecord> searchMedicalRecord =
+                medicalRecordRepository.findAllByFirstNameAndLastName(medicalRecordRequest.getFirstName(), medicalRecordRequest.getLastName());
+        if(!searchMedicalRecord.isPresent()){
+            MedicalRecord createMedicalRecord = new MedicalRecord();
+            createMedicalRecord.setFirstName(medicalRecordRequest.getFirstName());
+            createMedicalRecord.setLastName(medicalRecordRequest.getLastName());
+            createMedicalRecord.setBirthdate(medicalRecordRequest.getBirthdate());
+            createMedicalRecord.setMedications(medicalRecordRequest.getMedications());
+            createMedicalRecord.setAllergies(medicalRecordRequest.getAllergies());
+            medicalRecordRepository.save(createMedicalRecord);
+            return createMedicalRecord;
+        }
+        log.error("medicalRecord already exist");
+        return null;
+    }
+
 }
 

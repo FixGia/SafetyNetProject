@@ -4,6 +4,7 @@ import com.jsoniter.any.Any;
 import com.project.apisafetynet.model.ModelRepository.*;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -19,20 +20,21 @@ public class LoadJsonFile {
 
     private static String filePath = Thread.currentThread().getContextClassLoader().getResource("data.json").getFile();
     private static byte[] bytesFile;
-    private static PersonService personService;
-    private static FireStationServiceImp fireStationService;
-    private static MedicalRecordServiceImpl medicalRecordService;
+    private final PersonService personService;
+    private final FireStationService fireStationService;
+    private final MedicalRecordService medicalRecordService;
     private final AllergiesService allergiesService;
     private final MedicationService medicationService;
     private MedicalRecord medicalRecord;
 
-    public LoadJsonFile(MedicalRecordServiceImpl medicalRecordService, PersonService personService, FireStationServiceImp fireStationService, AllergiesService allergiesService, MedicationService medicationService) {
-        LoadJsonFile.personService = personService;
-        LoadJsonFile.fireStationService = fireStationService;
-        LoadJsonFile.medicalRecordService = medicalRecordService;
+    public LoadJsonFile(PersonService personService, FireStationService fireStationService, MedicalRecordService medicalRecordService, AllergiesService allergiesService, MedicationService medicationService) {
+        this.personService = personService;
+        this.fireStationService = fireStationService;
+        this.medicalRecordService = medicalRecordService;
         this.allergiesService = allergiesService;
         this.medicationService = medicationService;
     }
+
 
     public void readPersons() throws IOException {
         bytesFile = Files.readAllBytes(new File(filePath).toPath());
