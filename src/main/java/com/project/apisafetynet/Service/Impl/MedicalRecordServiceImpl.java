@@ -1,6 +1,7 @@
-package com.project.apisafetynet.Service;
+package com.project.apisafetynet.Service.Impl;
 
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
+import com.project.apisafetynet.Service.MedicalRecordService;
 import com.project.apisafetynet.model.DTO.MedicalRecordRequest;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @Slf4j
 public class MedicalRecordServiceImpl implements MedicalRecordService {
 
-    private MedicalRecordRepository medicalRecordRepository;
+    private final MedicalRecordRepository medicalRecordRepository;
 
     public MedicalRecordServiceImpl(MedicalRecordRepository medicalRecordRepository) {
         this.medicalRecordRepository = medicalRecordRepository;
@@ -49,7 +50,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             medicalRecordRepository.save(medicalRecord);
 
         } catch (Exception e) {
-            log.debug("Error attempting to add a new MedicalRecord in [MedicalRecord/saveMedicalRecord");
+            log.error("Error attempting to add a new MedicalRecord in [MedicalRecord/saveMedicalRecord");
         }
         return Optional.of(medicalRecord);
     }
@@ -85,8 +86,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             medicalRecordRepository.save(currentMedicalRecord);
             return currentMedicalRecord;
         }
-        log.debug("Error attempting to update a MedicalRecord in [MedicalRecord/updateMedicalRecord");
-        return mR.get();
+        log.error("Error attempting to update a MedicalRecord in [MedicalRecord/updateMedicalRecord");
+        return null;
     }
 
     @Override

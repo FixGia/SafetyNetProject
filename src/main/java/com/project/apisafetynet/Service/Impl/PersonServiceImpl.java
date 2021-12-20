@@ -1,8 +1,10 @@
-package com.project.apisafetynet.Service;
+package com.project.apisafetynet.Service.Impl;
 
 
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
+import com.project.apisafetynet.Service.CalculateAgeService;
+import com.project.apisafetynet.Service.PersonService;
 import com.project.apisafetynet.model.DTO.*;
 import com.project.apisafetynet.model.DTO.PersonRequest;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;
@@ -54,7 +56,7 @@ public class PersonServiceImpl implements PersonService {
         try {
             personRepository.save(person);
         } catch (Exception e) {
-            log.debug("Error attempting to add a new person in [PersonServiceImpl/savePerson] method");
+            log.error("Error attempting to add a new person in [PersonServiceImpl/savePerson] method");
         }
         return Optional.of(person);
     }

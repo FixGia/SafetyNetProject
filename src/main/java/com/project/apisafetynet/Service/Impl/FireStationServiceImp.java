@@ -1,7 +1,9 @@
-package com.project.apisafetynet.Service;
+package com.project.apisafetynet.Service.Impl;
 import com.project.apisafetynet.Repository.FireStationRepository;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
+import com.project.apisafetynet.Service.CalculateAgeService;
+import com.project.apisafetynet.Service.FireStationService;
 import com.project.apisafetynet.model.DTO.*;
 import com.project.apisafetynet.model.DTO.FirestationRequest;
 import com.project.apisafetynet.model.ModelRepository.FireStation;
@@ -20,10 +22,10 @@ import java.util.Optional;
 @Slf4j
 public class FireStationServiceImp implements FireStationService {
 
-    final FireStationRepository fireStationRepository;
-    final PersonRepository personRepository;
-    final MedicalRecordRepository medicalRecordRepository;
-    final CalculateAgeService calculateAgeService;
+    private final FireStationRepository fireStationRepository;
+    private final PersonRepository personRepository;
+    private final MedicalRecordRepository medicalRecordRepository;
+    private final CalculateAgeService calculateAgeService;
 
 
     public FireStationServiceImp(FireStationRepository fireStationRepository, PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository, CalculateAgeService calculateAgeService) {
@@ -49,7 +51,7 @@ public class FireStationServiceImp implements FireStationService {
             }
             fireStationRepository.save(fireStation);
         } catch (Exception e) {
-            log.debug("Error attempting to add a new FireStation in [FireStation/saveFireStation]");
+            log.error("Error attempting to add a new FireStation in [FireStation/saveFireStation]");
         }
         return  Optional.of(fireStation);
 

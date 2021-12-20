@@ -2,8 +2,8 @@ package com.project.apisafetynet.ServiceTest;
 
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.PersonRepository;
-import com.project.apisafetynet.Service.CalculateAgeServiceImpl;
-import com.project.apisafetynet.Service.PersonServiceImpl;
+import com.project.apisafetynet.Service.Impl.CalculateAgeServiceImpl;
+import com.project.apisafetynet.Service.Impl.PersonServiceImpl;
 import com.project.apisafetynet.model.DTO.ChildrenAndFamilyMembers;
 import com.project.apisafetynet.model.DTO.FamilyMembers;
 import com.project.apisafetynet.model.DTO.PersonRequest;

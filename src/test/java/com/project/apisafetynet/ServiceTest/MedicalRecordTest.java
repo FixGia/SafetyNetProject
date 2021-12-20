@@ -3,7 +3,7 @@ package com.project.apisafetynet.ServiceTest;
 import com.project.apisafetynet.Repository.AllergiesRepository;
 import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Repository.MedicationsRepository;
-import com.project.apisafetynet.Service.MedicalRecordServiceImpl;
+import com.project.apisafetynet.Service.Impl.MedicalRecordServiceImpl;
 import com.project.apisafetynet.model.DTO.MedicalRecordRequest;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import com.project.apisafetynet.model.ModelRepository.MedicalRecord;

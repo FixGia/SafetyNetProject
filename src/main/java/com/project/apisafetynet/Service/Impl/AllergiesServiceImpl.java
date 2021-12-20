@@ -1,6 +1,7 @@
-package com.project.apisafetynet.Service;
+package com.project.apisafetynet.Service.Impl;
 
 import com.project.apisafetynet.Repository.AllergiesRepository;
+import com.project.apisafetynet.Service.AllergiesService;
 import com.project.apisafetynet.model.ModelRepository.Allergies;
 import org.springframework.stereotype.Service;
 

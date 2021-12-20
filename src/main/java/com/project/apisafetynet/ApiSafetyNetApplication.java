@@ -1,7 +1,6 @@
 package com.project.apisafetynet;
 
-import com.project.apisafetynet.Service.FireStationService;
-import com.project.apisafetynet.Service.LoadJsonFile;
+import com.project.apisafetynet.Util.LoadJsonFile;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

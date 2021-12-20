@@ -1,20 +1,14 @@
 package com.project.apisafetynet.ServiceTest;
 
-import com.project.apisafetynet.Repository.MedicalRecordRepository;
 import com.project.apisafetynet.Service.CalculateAgeService;
-import com.project.apisafetynet.Service.CalculateAgeServiceImpl;
+import com.project.apisafetynet.Service.Impl.CalculateAgeServiceImpl;
 
 import com.project.apisafetynet.model.DTO.Age;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

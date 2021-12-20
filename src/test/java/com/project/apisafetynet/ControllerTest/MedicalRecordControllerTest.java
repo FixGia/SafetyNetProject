@@ -1,7 +1,7 @@
 package com.project.apisafetynet.ControllerTest;
 
 import com.project.apisafetynet.Controller.MedicalRecordController;
-import com.project.apisafetynet.Service.LoadJsonFile;
+import com.project.apisafetynet.Util.LoadJsonFile;
 import com.project.apisafetynet.Service.MedicalRecordService;
 
 import com.project.apisafetynet.model.ModelRepository.Allergies;
