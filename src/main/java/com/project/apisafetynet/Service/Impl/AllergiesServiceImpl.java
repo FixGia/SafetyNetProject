@@ -10,8 +10,7 @@ import java.util.Optional;
 @Service
 public class AllergiesServiceImpl implements AllergiesService {
 
-    final
-    AllergiesRepository allergiesRepository;
+    private final AllergiesRepository allergiesRepository;
 
     public AllergiesServiceImpl(AllergiesRepository allergiesRepository) {
         this.allergiesRepository = allergiesRepository;
@@ -19,7 +18,7 @@ public class AllergiesServiceImpl implements AllergiesService {
 
 
     @Override
-    public Iterable<Allergies> saveAll(Iterable<Allergies> allergies) {
+    public Iterable<Allergies> saveAllergies(Iterable<Allergies> allergies) {
         return allergiesRepository.saveAll(allergies);
     }
 }

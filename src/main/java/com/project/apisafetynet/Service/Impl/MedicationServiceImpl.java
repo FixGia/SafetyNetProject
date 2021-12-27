@@ -12,8 +12,7 @@ import java.util.Optional;
 @Service
 public class MedicationServiceImpl implements MedicationService {
 
-    final
-    MedicationsRepository medicationsRepository;
+    private final MedicationsRepository medicationsRepository;
 
     public MedicationServiceImpl(MedicationsRepository medicationsRepository) {
         this.medicationsRepository = medicationsRepository;

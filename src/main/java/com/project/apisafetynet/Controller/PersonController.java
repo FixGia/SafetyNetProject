@@ -18,7 +18,7 @@ import java.util.Optional;
 @Log4j2
 public class PersonController {
 
-    final PersonService personService;
+    private final PersonService personService;
     private static final String CLASSPATH = "com.project.ApiSafetyNet.PersonController";
 
     public PersonController(PersonService personService) {

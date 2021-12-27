@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface AllergiesService {
 
-    Iterable<Allergies> saveAll(Iterable<Allergies> allergies);
+    Iterable<Allergies> saveAllergies(Iterable<Allergies> allergies);
 
 }

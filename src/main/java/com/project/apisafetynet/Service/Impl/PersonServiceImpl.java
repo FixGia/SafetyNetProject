@@ -24,9 +24,9 @@ import java.util.Optional;
 @Slf4j
 public class PersonServiceImpl implements PersonService {
 
-    final PersonRepository personRepository;
-    final MedicalRecordRepository medicalRecordRepository;
-   final CalculateAgeService calculateAgeService;
+    private final PersonRepository personRepository;
+    private final MedicalRecordRepository medicalRecordRepository;
+  private final CalculateAgeService calculateAgeService;
 
     public PersonServiceImpl(PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository, CalculateAgeService calculateAgeService) {
         this.personRepository = personRepository;

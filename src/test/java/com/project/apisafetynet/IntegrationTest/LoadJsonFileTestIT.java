@@ -80,7 +80,7 @@ public class LoadJsonFileTestIT {
             allergiesAnyList.forEach(a->{
                 if(!a.isEmpty()) allergies.add(new Allergies().nameAllergies(a));
             });
-            allergiesService.saveAll(allergies);
+            allergiesService.saveAllergies(allergies);
             String medicationsAny = mr.get("medications").toString().replaceAll("[\\[\\]\"]", "");
             List<String> medicationsAnyList= List.of(medicationsAny.split(","));
             List<Medications> medications = new ArrayList<>();

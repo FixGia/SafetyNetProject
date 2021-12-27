@@ -16,7 +16,7 @@ import java.util.Optional;
 public class MedicalRecordController {
 
     private static final String CLASSPATH = "com.project.ApiSafetyNet.MedicalRecordController";
-    final MedicalRecordService medicalRecordService;
+    private final MedicalRecordService medicalRecordService;
 
     public MedicalRecordController(MedicalRecordService medicalRecordService) {
         this.medicalRecordService = medicalRecordService;

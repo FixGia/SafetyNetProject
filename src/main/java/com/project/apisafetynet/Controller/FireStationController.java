@@ -19,8 +19,8 @@ import java.util.Optional;
 @Log4j2
 public class FireStationController {
 
-    final FireStationService fireStationService;
-    final PersonService personService;
+    private final FireStationService fireStationService;
+    private final PersonService personService;
     private static final String CLASSPATH = "com.project.ApiSafetyNet.FireStationController";
 
     public FireStationController(FireStationService fireStationService, PersonService personService) {
